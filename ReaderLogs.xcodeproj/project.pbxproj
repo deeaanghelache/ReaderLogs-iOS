@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */; };
+		9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */; };
+		9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */; };
 		90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09929D8142A000F24D2 /* AppDelegate.swift */; };
 		90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */; };
 		90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09D29D8142A000F24D2 /* ViewController.swift */; };
@@ -16,6 +19,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
+		9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		90D5A09629D8142A000F24D2 /* ReaderLogs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReaderLogs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90D5A09929D8142A000F24D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +66,9 @@
 				90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */,
 				90D5A09D29D8142A000F24D2 /* ViewController.swift */,
 				90D5A09F29D8142A000F24D2 /* Main.storyboard */,
+				9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */,
+				9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */,
+				9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */,
 				90D5A0A229D8142D000F24D2 /* Assets.xcassets */,
 				90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */,
 				90D5A0A729D8142D000F24D2 /* Info.plist */,
@@ -138,7 +147,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */,
+				9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */,
 				90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */,
+				9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */,
 				90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */,
 				90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */,
 			);
