@@ -130,7 +130,7 @@ class BookListViewController: UIViewController {
                                                     toItem: view,
                                                     attribute: .trailing,
                                                     multiplier: 1.0,
-                                                    constant: -320.0)
+                                                    constant: -340.0)
         let topConstraintAllButton = NSLayoutConstraint(item: allButton,
                                                attribute: .top,
                                                relatedBy: .equal,
@@ -165,7 +165,7 @@ class BookListViewController: UIViewController {
                                                    toItem: view,
                                                    attribute: .leading,
                                                    multiplier: 1.0,
-                                                   constant: 80.0)
+                                                   constant: 60.0)
         // right
         let trailingConstraintCurrentlyReadingButton = NSLayoutConstraint(item: currentlyReadingButton,
                                                     attribute: .trailing,
@@ -173,7 +173,7 @@ class BookListViewController: UIViewController {
                                                     toItem: view,
                                                     attribute: .trailing,
                                                     multiplier: 1.0,
-                                                    constant: -180.0)
+                                                    constant: -210.0)
         let topConstraintCurrentlyReadingButton = NSLayoutConstraint(item: currentlyReadingButton,
                                                attribute: .top,
                                                relatedBy: .equal,
@@ -192,6 +192,49 @@ class BookListViewController: UIViewController {
                                      trailingConstraintCurrentlyReadingButton,
                                      topConstraintCurrentlyReadingButton,
                                      bottomConstraintCurrentlyReadingButton])
+        
+        // MARK: Finished Button
+        finishedButton.setTitle("Finished", for: .normal)
+        finishedButton.backgroundColor = .tintColor
+        finishedButton.layer.cornerRadius = 10.0
+        finishedButton.clipsToBounds = true
+        finishedButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(finishedButton)
+        
+        // left
+        let leadingConstraintFinishedButton = NSLayoutConstraint(item: finishedButton,
+                                                   attribute: .leading,
+                                                   relatedBy: .equal,
+                                                   toItem: view,
+                                                   attribute: .leading,
+                                                   multiplier: 1.0,
+                                                   constant: 190.0)
+        // right
+        let trailingConstraintFinishedButton = NSLayoutConstraint(item: finishedButton,
+                                                    attribute: .trailing,
+                                                    relatedBy: .equal,
+                                                    toItem: view,
+                                                    attribute: .trailing,
+                                                    multiplier: 1.0,
+                                                    constant: -120.0)
+        let topConstraintFinishedButton = NSLayoutConstraint(item: finishedButton,
+                                               attribute: .top,
+                                               relatedBy: .equal,
+                                               toItem: view.safeAreaLayoutGuide,
+                                               attribute: .top,
+                                               multiplier: 1.0,
+                                               constant: 10.0)
+        let bottomConstraintFinishedButton = NSLayoutConstraint(item: finishedButton,
+                                                  attribute: .bottom,
+                                                  relatedBy: .equal,
+                                                  toItem: view.safeAreaLayoutGuide,
+                                                  attribute: .bottom,
+                                                  multiplier: 1.0,
+                                                  constant: -630.0)
+        NSLayoutConstraint.activate([leadingConstraintFinishedButton,
+                                     trailingConstraintFinishedButton,
+                                     topConstraintFinishedButton,
+                                     bottomConstraintFinishedButton])
     }
 
 }
