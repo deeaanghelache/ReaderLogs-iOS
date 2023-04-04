@@ -11,6 +11,8 @@ class BookListViewController: UIViewController {
     
     let tableView = UITableView()
     let allButton = UIButton()
+    let currentlyReadingButton = UIButton()
+    let finishedButton = UIButton()
 //    let searchBarView = UISearchBar()
 //    let searchBar = UITextField()
 
@@ -128,7 +130,7 @@ class BookListViewController: UIViewController {
                                                     toItem: view,
                                                     attribute: .trailing,
                                                     multiplier: 1.0,
-                                                    constant: -300.0)
+                                                    constant: -320.0)
         let topConstraintAllButton = NSLayoutConstraint(item: allButton,
                                                attribute: .top,
                                                relatedBy: .equal,
@@ -147,6 +149,49 @@ class BookListViewController: UIViewController {
                                      trailingConstraintAllButton,
                                      topConstraintAllButton,
                                      bottomConstraintAllButton])
+        
+        // MARK: Currently Reading Button
+        currentlyReadingButton.setTitle("Reading Now", for: .normal)
+        currentlyReadingButton.backgroundColor = .tintColor
+        currentlyReadingButton.layer.cornerRadius = 10.0
+        currentlyReadingButton.clipsToBounds = true
+        currentlyReadingButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(currentlyReadingButton)
+        
+        // left
+        let leadingConstraintCurrentlyReadingButton = NSLayoutConstraint(item: currentlyReadingButton,
+                                                   attribute: .leading,
+                                                   relatedBy: .equal,
+                                                   toItem: view,
+                                                   attribute: .leading,
+                                                   multiplier: 1.0,
+                                                   constant: 80.0)
+        // right
+        let trailingConstraintCurrentlyReadingButton = NSLayoutConstraint(item: currentlyReadingButton,
+                                                    attribute: .trailing,
+                                                    relatedBy: .equal,
+                                                    toItem: view,
+                                                    attribute: .trailing,
+                                                    multiplier: 1.0,
+                                                    constant: -180.0)
+        let topConstraintCurrentlyReadingButton = NSLayoutConstraint(item: currentlyReadingButton,
+                                               attribute: .top,
+                                               relatedBy: .equal,
+                                               toItem: view.safeAreaLayoutGuide,
+                                               attribute: .top,
+                                               multiplier: 1.0,
+                                               constant: 10.0)
+        let bottomConstraintCurrentlyReadingButton = NSLayoutConstraint(item: currentlyReadingButton,
+                                                  attribute: .bottom,
+                                                  relatedBy: .equal,
+                                                  toItem: view.safeAreaLayoutGuide,
+                                                  attribute: .bottom,
+                                                  multiplier: 1.0,
+                                                  constant: -630.0)
+        NSLayoutConstraint.activate([leadingConstraintCurrentlyReadingButton,
+                                     trailingConstraintCurrentlyReadingButton,
+                                     topConstraintCurrentlyReadingButton,
+                                     bottomConstraintCurrentlyReadingButton])
     }
 
 }

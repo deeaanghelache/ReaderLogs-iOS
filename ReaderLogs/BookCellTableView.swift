@@ -63,7 +63,7 @@ class BookCellTableView: UITableViewCell {
         cellStatusLabel.translatesAutoresizingMaskIntoConstraints = false
         cellStatusLabel.font = UIFont.systemFont(ofSize: 14.0)
         
-        cellStatusLabel.text = "  Reading now "
+        cellStatusLabel.text = "  Reading Now "
         cellStatusLabel.font = UIFont.boldSystemFont(ofSize: 14)
         cellStatusLabel.textColor = .white
 //        cellStatusLabel.numberOfLines = 2
