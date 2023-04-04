@@ -16,6 +16,7 @@
 		90D5A0A129D8142A000F24D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A09F29D8142A000F24D2 /* Main.storyboard */; };
 		90D5A0A329D8142D000F24D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A0A229D8142D000F24D2 /* Assets.xcassets */; };
 		90D5A0A629D8142D000F24D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */; };
+		DD9DAA0F29DCA86100F7CB0F /* SummaryProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		90D5A0A229D8142D000F24D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90D5A0A529D8142D000F24D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		90D5A0A729D8142D000F24D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				90D5A09F29D8142A000F24D2 /* Main.storyboard */,
 				9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */,
 				9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */,
+				DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */,
 				9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */,
 				90D5A0A229D8142D000F24D2 /* Assets.xcassets */,
 				90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */,
@@ -148,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */,
+				DD9DAA0F29DCA86100F7CB0F /* SummaryProgressView.swift in Sources */,
 				9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */,
 				90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */,
 				9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */,
@@ -306,6 +310,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -333,6 +338,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
