@@ -13,6 +13,7 @@ class BookListViewController: UIViewController {
     let allButton = UIButton()
     let currentlyReadingButton = UIButton()
     let finishedButton = UIButton()
+    let toReadButton = UIButton()
 //    let searchBarView = UISearchBar()
 //    let searchBar = UITextField()
 
@@ -235,6 +236,49 @@ class BookListViewController: UIViewController {
                                      trailingConstraintFinishedButton,
                                      topConstraintFinishedButton,
                                      bottomConstraintFinishedButton])
+        
+        // MARK: Want To Read Button
+        toReadButton.setTitle("To Read", for: .normal)
+        toReadButton.backgroundColor = .tintColor
+        toReadButton.layer.cornerRadius = 10.0
+        toReadButton.clipsToBounds = true
+        toReadButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(toReadButton)
+        
+        // left
+        let leadingConstraintToReadButton = NSLayoutConstraint(item: toReadButton,
+                                                   attribute: .leading,
+                                                   relatedBy: .equal,
+                                                   toItem: view,
+                                                   attribute: .leading,
+                                                   multiplier: 1.0,
+                                                   constant: 280.0)
+        // right
+        let trailingConstraintToReadButton = NSLayoutConstraint(item: toReadButton,
+                                                    attribute: .trailing,
+                                                    relatedBy: .equal,
+                                                    toItem: view,
+                                                    attribute: .trailing,
+                                                    multiplier: 1.0,
+                                                    constant: -30.0)
+        let topConstraintToReadButton = NSLayoutConstraint(item: toReadButton,
+                                               attribute: .top,
+                                               relatedBy: .equal,
+                                               toItem: view.safeAreaLayoutGuide,
+                                               attribute: .top,
+                                               multiplier: 1.0,
+                                               constant: 10.0)
+        let bottomConstraintToReadButton = NSLayoutConstraint(item: toReadButton,
+                                                  attribute: .bottom,
+                                                  relatedBy: .equal,
+                                                  toItem: view.safeAreaLayoutGuide,
+                                                  attribute: .bottom,
+                                                  multiplier: 1.0,
+                                                  constant: -630.0)
+        NSLayoutConstraint.activate([leadingConstraintToReadButton,
+                                     trailingConstraintToReadButton,
+                                     topConstraintToReadButton,
+                                     bottomConstraintToReadButton])
     }
 
 }
