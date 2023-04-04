@@ -119,7 +119,7 @@ extension BookListViewController: UITableViewDataSource {
 //                    cell.layer.borderWidth = 1.0
 //                    cell.layer.shadowOffset = CGSize(width: -1, height: 1)
 //                    cell.layer.borderColor = UIColor.lightGray.cgColor
-//
+
                     return cell
                 } else {
                     return UITableViewCell()

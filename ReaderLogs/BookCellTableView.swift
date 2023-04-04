@@ -31,6 +31,7 @@ class BookCellTableView: UITableViewCell {
     let cellStatusLabel = UILabel()  // doar daca e in progress sau finished
     //        let rating // daca e finished -> afiseaza
     // percentage daca e done
+    var progressView = UIProgressView(progressViewStyle: .bar)
 
     // MARK: Init function
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -41,7 +42,7 @@ class BookCellTableView: UITableViewCell {
         // Cover
         cellBookCoverView.translatesAutoresizingMaskIntoConstraints = false
         cellBookCoverView.backgroundColor = .purple
-        cellBookCoverView.layer.cornerRadius = 5.0
+        cellBookCoverView.layer.cornerRadius = 10.0
         cellBookCoverView.clipsToBounds = true
         cellBookCoverView.frame.size.height = 80.0
         contentView.addSubview(cellBookCoverView)
@@ -64,7 +65,7 @@ class BookCellTableView: UITableViewCell {
         
         cellStatusLabel.text = "  Reading now "
         cellStatusLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        cellStatusLabel.textColor = .black
+        cellStatusLabel.textColor = .white
 //        cellStatusLabel.numberOfLines = 2
         cellStatusLabel.layer.borderColor = UIColor.tintColor.cgColor
         cellStatusLabel.layer.borderWidth = 1.0
@@ -72,6 +73,16 @@ class BookCellTableView: UITableViewCell {
         cellStatusLabel.layer.cornerRadius = 12.0
         cellStatusLabel.clipsToBounds = true
         contentView.addSubview(cellStatusLabel)
+        
+        // Progress
+        var progressValue = 0.7
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.setProgress(Float(progressValue), animated: false)
+        progressView.layer.cornerRadius = 5.0
+        progressView.clipsToBounds = true
+        progressView.backgroundColor = .lightGray
+        contentView.addSubview(progressView)
+        
 
         let constraints = [
             cellBookCoverView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
@@ -86,10 +97,16 @@ class BookCellTableView: UITableViewCell {
             cellBookAuthor.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -70.0),
             cellBookAuthor.topAnchor.constraint(equalTo: cellBookTitleLabel.bottomAnchor, constant: 5.0),
 
-            cellStatusLabel.leadingAnchor.constraint(equalTo: cellBookCoverView.trailingAnchor, constant: 10.0),
+            cellStatusLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
             cellStatusLabel.widthAnchor.constraint(equalToConstant: 100.0),
             cellStatusLabel.heightAnchor.constraint(equalToConstant: 25.0),
-            cellStatusLabel.bottomAnchor.constraint(equalTo: cellBookCoverView.bottomAnchor)
+            cellStatusLabel.topAnchor.constraint(equalTo: cellBookCoverView.topAnchor),
+            
+            progressView.bottomAnchor.constraint(equalTo: cellBookCoverView.bottomAnchor),
+            progressView.leadingAnchor.constraint(equalTo: cellBookCoverView.trailingAnchor, constant: 10.0),
+            progressView.trailingAnchor.constraint(equalTo: cellStatusLabel.trailingAnchor),
+            progressView.heightAnchor.constraint(equalToConstant: 5.0)
+//            progressView.widthAnchor.constraint(equalToConstant: 230.0)
         ]
 
         NSLayoutConstraint.activate(constraints)
