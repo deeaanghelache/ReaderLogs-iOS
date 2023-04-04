@@ -41,7 +41,7 @@ class BookCellTableView: UITableViewCell {
 
         // Cover
         cellBookCoverView.translatesAutoresizingMaskIntoConstraints = false
-        cellBookCoverView.backgroundColor = .purple
+        cellBookCoverView.backgroundColor = .lightGray
         cellBookCoverView.layer.cornerRadius = 10.0
         cellBookCoverView.clipsToBounds = true
         cellBookCoverView.frame.size.height = 80.0
@@ -67,9 +67,9 @@ class BookCellTableView: UITableViewCell {
         cellStatusLabel.font = UIFont.boldSystemFont(ofSize: 14)
         cellStatusLabel.textColor = .white
 //        cellStatusLabel.numberOfLines = 2
-        cellStatusLabel.layer.borderColor = UIColor.tintColor.cgColor
+        cellStatusLabel.layer.borderColor = UIColor.lightGray.cgColor
         cellStatusLabel.layer.borderWidth = 1.0
-        cellStatusLabel.backgroundColor = .tintColor
+        cellStatusLabel.backgroundColor = .lightGray
         cellStatusLabel.layer.cornerRadius = 12.0
         cellStatusLabel.clipsToBounds = true
         contentView.addSubview(cellStatusLabel)
@@ -106,7 +106,6 @@ class BookCellTableView: UITableViewCell {
             progressView.leadingAnchor.constraint(equalTo: cellBookCoverView.trailingAnchor, constant: 10.0),
             progressView.trailingAnchor.constraint(equalTo: cellStatusLabel.trailingAnchor),
             progressView.heightAnchor.constraint(equalToConstant: 5.0)
-//            progressView.widthAnchor.constraint(equalToConstant: 230.0)
         ]
 
         NSLayoutConstraint.activate(constraints)

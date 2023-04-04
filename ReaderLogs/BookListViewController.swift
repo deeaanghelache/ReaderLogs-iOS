@@ -10,14 +10,18 @@ import UIKit
 class BookListViewController: UIViewController {
     
     let tableView = UITableView()
+    let allButton = UIButton()
 //    let searchBarView = UISearchBar()
 //    let searchBar = UITextField()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // MARK: Title
         title = "My Books"
         
+        
+        // MARK: Book Table
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 140.0
@@ -61,7 +65,7 @@ class BookListViewController: UIViewController {
                                      topConstraintTable,
                                      bottomConstraintTable])
         
-        
+        // MARK: Search Bar
 //        searchBar.text = "Search Bar"
 //        // left
 //        let leadingConstraintSearch = NSLayoutConstraint(item: tableView,
@@ -100,6 +104,49 @@ class BookListViewController: UIViewController {
 //
 //
 //        view.addSubview(searchBar)
+        
+        // MARK: All button
+        allButton.setTitle("All", for: .normal)
+        allButton.backgroundColor = .tintColor
+        allButton.layer.cornerRadius = 10.0
+        allButton.clipsToBounds = true
+        allButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(allButton)
+        
+        // left
+        let leadingConstraintAllButton = NSLayoutConstraint(item: allButton,
+                                                   attribute: .leading,
+                                                   relatedBy: .equal,
+                                                   toItem: view,
+                                                   attribute: .leading,
+                                                   multiplier: 1.0,
+                                                   constant: 10.0)
+        // right
+        let trailingConstraintAllButton = NSLayoutConstraint(item: allButton,
+                                                    attribute: .trailing,
+                                                    relatedBy: .equal,
+                                                    toItem: view,
+                                                    attribute: .trailing,
+                                                    multiplier: 1.0,
+                                                    constant: -300.0)
+        let topConstraintAllButton = NSLayoutConstraint(item: allButton,
+                                               attribute: .top,
+                                               relatedBy: .equal,
+                                               toItem: view.safeAreaLayoutGuide,
+                                               attribute: .top,
+                                               multiplier: 1.0,
+                                               constant: 10.0)
+        let bottomConstraintAllButton = NSLayoutConstraint(item: allButton,
+                                                  attribute: .bottom,
+                                                  relatedBy: .equal,
+                                                  toItem: view.safeAreaLayoutGuide,
+                                                  attribute: .bottom,
+                                                  multiplier: 1.0,
+                                                  constant: -630.0)
+        NSLayoutConstraint.activate([leadingConstraintAllButton,
+                                     trailingConstraintAllButton,
+                                     topConstraintAllButton,
+                                     bottomConstraintAllButton])
     }
 
 }
