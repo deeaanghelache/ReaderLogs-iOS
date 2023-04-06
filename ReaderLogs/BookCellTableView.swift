@@ -29,9 +29,11 @@ class BookCellTableView: UITableViewCell {
     let cellBookTitleLabel = UILabel()
     let cellBookAuthor = UILabel()
     let cellStatusLabel = UILabel()  // doar daca e in progress sau finished
-    //        let rating // daca e finished -> afiseaza
-    // percentage daca e done
-    var progressView = UIProgressView(progressViewStyle: .bar)
+    var rating = 4 // daca e finished -> afiseaza
+    var ratingView = UILabel()
+    let progressView = UIProgressView(progressViewStyle: .bar)
+    var progressValue = 0.7
+    var finished = false
 
     // MARK: Init function
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -62,28 +64,57 @@ class BookCellTableView: UITableViewCell {
         // Label -> done, currently reading
         cellStatusLabel.translatesAutoresizingMaskIntoConstraints = false
         cellStatusLabel.font = UIFont.systemFont(ofSize: 14.0)
-        
-        cellStatusLabel.text = "  Reading Now "
         cellStatusLabel.font = UIFont.boldSystemFont(ofSize: 14)
         cellStatusLabel.textColor = .white
-//        cellStatusLabel.numberOfLines = 2
-        cellStatusLabel.layer.borderColor = UIColor.lightGray.cgColor
         cellStatusLabel.layer.borderWidth = 1.0
-        cellStatusLabel.backgroundColor = .lightGray
         cellStatusLabel.layer.cornerRadius = 12.0
         cellStatusLabel.clipsToBounds = true
+        cellStatusLabel.textAlignment = .center
+        
+        if (finished) {
+            cellStatusLabel.layer.borderColor = UIColor.systemGreen.cgColor
+            cellStatusLabel.backgroundColor = .systemGreen
+            cellStatusLabel.text = "Done"
+        } else {
+            cellStatusLabel.layer.borderColor = UIColor.lightGray.cgColor
+            cellStatusLabel.backgroundColor = .lightGray
+            cellStatusLabel.text = "Reading Now"
+        }
         contentView.addSubview(cellStatusLabel)
         
         // Progress
-        var progressValue = 0.7
+        if (!finished) {
+            progressView.setProgress(Float(progressValue), animated: false)
+            progressView.layer.cornerRadius = 5.0
+            progressView.clipsToBounds = true
+            progressView.backgroundColor = .lightGray
+        }
         progressView.translatesAutoresizingMaskIntoConstraints = false
-        progressView.setProgress(Float(progressValue), animated: false)
-        progressView.layer.cornerRadius = 5.0
-        progressView.clipsToBounds = true
-        progressView.backgroundColor = .lightGray
         contentView.addSubview(progressView)
         
+        // Rating
+        if (finished) {
+            var fullStars = ""
+            var emptyStars = ""
+            var remainingStars = 5 - rating
+            
+            for _ in 1...rating {
+                fullStars += "★"
+            }
+            
+            for _ in 0...remainingStars {
+                emptyStars += "☆"
+            }
+            
+            var allStars = "\(fullStars)\(emptyStars)"
 
+            ratingView.text = String(allStars.dropLast())
+            ratingView.font = UIFont.boldSystemFont(ofSize: 20)
+            ratingView.textColor = UIColor.systemYellow
+        }
+        ratingView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(ratingView)
+        
         let constraints = [
             cellBookCoverView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
             cellBookCoverView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -105,7 +136,10 @@ class BookCellTableView: UITableViewCell {
             progressView.bottomAnchor.constraint(equalTo: cellBookCoverView.bottomAnchor),
             progressView.leadingAnchor.constraint(equalTo: cellBookCoverView.trailingAnchor, constant: 10.0),
             progressView.trailingAnchor.constraint(equalTo: cellStatusLabel.trailingAnchor),
-            progressView.heightAnchor.constraint(equalToConstant: 5.0)
+            progressView.heightAnchor.constraint(equalToConstant: 5.0),
+            
+            ratingView.topAnchor.constraint(equalTo: cellStatusLabel.bottomAnchor, constant: 10.0),
+            ratingView.trailingAnchor.constraint(equalTo: cellStatusLabel.trailingAnchor)
         ]
 
         NSLayoutConstraint.activate(constraints)
