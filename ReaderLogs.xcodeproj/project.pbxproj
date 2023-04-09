@@ -11,6 +11,7 @@
 		9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */; };
 		9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */; };
 		9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */; };
+		90637B5429E2BBEF00A8D13C /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90637B5329E2BBEF00A8D13C /* SearchViewController.swift */; };
 		90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09929D8142A000F24D2 /* AppDelegate.swift */; };
 		90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */; };
 		90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09D29D8142A000F24D2 /* ViewController.swift */; };
@@ -27,6 +28,7 @@
 		9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
 		9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		90637B5329E2BBEF00A8D13C /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		90D5A09629D8142A000F24D2 /* ReaderLogs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReaderLogs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90D5A09929D8142A000F24D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 		90D5A09829D8142A000F24D2 /* ReaderLogs */ = {
 			isa = PBXGroup;
 			children = (
+				90637B5329E2BBEF00A8D13C /* SearchViewController.swift */,
 				C31E989C29E2A37800615190 /* ApiKey.swift */,
 				C38B3A0929DAD96E0069C09C /* Book.swift */,
 				90D5A09929D8142A000F24D2 /* AppDelegate.swift */,
@@ -160,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */,
+				90637B5429E2BBEF00A8D13C /* SearchViewController.swift in Sources */,
 				9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */,
 				90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */,
 				C38B3A0629DAD9330069C09C /* NetworkManager.swift in Sources */,
