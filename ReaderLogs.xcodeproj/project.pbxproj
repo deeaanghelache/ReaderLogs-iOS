@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		901A889129DACFDA004C5E55 /* BookCellTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A889029DACFDA004C5E55 /* BookCellTableView.swift */; };
 		9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */; };
 		9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */; };
 		9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		901A889029DACFDA004C5E55 /* BookCellTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCellTableView.swift; sourceTree = "<group>"; };
 		9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
 		9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */,
 				90D5A09D29D8142A000F24D2 /* ViewController.swift */,
 				90D5A09F29D8142A000F24D2 /* Main.storyboard */,
+				901A889029DACFDA004C5E55 /* BookCellTableView.swift */,
 				9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */,
 				9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */,
 				9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */,
@@ -151,6 +154,7 @@
 				9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */,
 				90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */,
 				9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */,
+				901A889129DACFDA004C5E55 /* BookCellTableView.swift in Sources */,
 				90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */,
 				90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */,
 			);
