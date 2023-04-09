@@ -17,6 +17,9 @@
 		90D5A0A129D8142A000F24D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A09F29D8142A000F24D2 /* Main.storyboard */; };
 		90D5A0A329D8142D000F24D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A0A229D8142D000F24D2 /* Assets.xcassets */; };
 		90D5A0A629D8142D000F24D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */; };
+		C31E989D29E2A37800615190 /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31E989C29E2A37800615190 /* ApiKey.swift */; };
+		C38B3A0629DAD9330069C09C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38B3A0529DAD9330069C09C /* NetworkManager.swift */; };
+		C38B3A0A29DAD96E0069C09C /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38B3A0929DAD96E0069C09C /* Book.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		90D5A0A229D8142D000F24D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90D5A0A529D8142D000F24D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		90D5A0A729D8142D000F24D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C31E989C29E2A37800615190 /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = SOURCE_ROOT; };
+		C38B3A0529DAD9330069C09C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		C38B3A0929DAD96E0069C09C /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,8 @@
 		90D5A09829D8142A000F24D2 /* ReaderLogs */ = {
 			isa = PBXGroup;
 			children = (
+				C31E989C29E2A37800615190 /* ApiKey.swift */,
+				C38B3A0929DAD96E0069C09C /* Book.swift */,
 				90D5A09929D8142A000F24D2 /* AppDelegate.swift */,
 				90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */,
 				90D5A09D29D8142A000F24D2 /* ViewController.swift */,
@@ -75,6 +83,7 @@
 				90D5A0A229D8142D000F24D2 /* Assets.xcassets */,
 				90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */,
 				90D5A0A729D8142D000F24D2 /* Info.plist */,
+				C38B3A0529DAD9330069C09C /* NetworkManager.swift */,
 			);
 			path = ReaderLogs;
 			sourceTree = "<group>";
@@ -153,9 +162,12 @@
 				9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */,
 				9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */,
 				90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */,
+				C38B3A0629DAD9330069C09C /* NetworkManager.swift in Sources */,
 				9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */,
+				C38B3A0A29DAD96E0069C09C /* Book.swift in Sources */,
 				901A889129DACFDA004C5E55 /* BookCellTableView.swift in Sources */,
 				90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */,
+				C31E989D29E2A37800615190 /* ApiKey.swift in Sources */,
 				90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
