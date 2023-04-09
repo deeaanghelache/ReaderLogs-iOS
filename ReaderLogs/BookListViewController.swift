@@ -15,14 +15,12 @@ class BookListViewController: UIViewController {
     let finishedButton = UIButton()
     let toReadButton = UIButton()
     let searchBarView = UISearchBar()
-//    let searchBar = UITextField()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // MARK: Title
         title = "My Books"
-        
         
         // MARK: Book Table
         tableView.dataSource = self

@@ -7,28 +7,27 @@
 
 import Foundation
 
-struct BookResponse: Decodable {
-    let books: [Book]
+struct BookResponse: Codable {
+    let kind: String
+    let totalItems: Int
+    let items: [Book]
 }
 
-
-struct Book: Decodable {
-    let id: String
+struct VolumeInfo: Codable {
     let title: String
-    let authors: [String]
-    let category: [String]
-    let nrOfPages: Int
-    let description: String
-    let cover: String
-    
-    enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case title = "title"
-        case authors = "authors"
-        case category = "categories"
-        case nrOfPages = "pageCount"
-        case description = "description"
-        case cover = "image"
-    }
-    
+    let authors: [String]?
+    let description: String?
+    let imageLinks: ImageLinks
+}
+
+struct ImageLinks: Codable {
+    let smallThumbnail: String?
+    let thumbnail: String?
+}
+
+struct Book: Codable {
+    let id: String
+    let categories: [String]?
+    let pageCount: Int?
+    let volumeInfo: VolumeInfo
 }

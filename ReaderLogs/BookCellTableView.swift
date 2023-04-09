@@ -53,6 +53,7 @@ class BookCellTableView: UITableViewCell {
         cellBookTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         cellBookTitleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         cellBookTitleLabel.text = "Book Title"
+        cellBookTitleLabel.numberOfLines = 2
         contentView.addSubview(cellBookTitleLabel)
 
         // Author
@@ -122,6 +123,7 @@ class BookCellTableView: UITableViewCell {
             cellBookCoverView.heightAnchor.constraint(equalToConstant: 100.0),
 
             cellBookTitleLabel.leadingAnchor.constraint(equalTo: cellBookCoverView.trailingAnchor, constant: 10.0),
+            cellBookTitleLabel.trailingAnchor.constraint(equalTo: cellStatusLabel.leadingAnchor, constant: -10.0),
             cellBookTitleLabel.topAnchor.constraint(equalTo: cellBookCoverView.topAnchor),
 
             cellBookAuthor.leadingAnchor.constraint(equalTo: cellBookTitleLabel.leadingAnchor),

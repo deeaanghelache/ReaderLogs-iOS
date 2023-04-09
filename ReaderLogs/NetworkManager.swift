@@ -11,8 +11,6 @@ import Foundation
 class NetworkManager {
     private let baseURL = "https://www.googleapis.com/books/v1/volumes"
     
-    
-    
     func getURLForBooks(word: String) -> URL? {
            guard var urlComponents = URLComponents(string: baseURL) else {
                return nil
@@ -24,7 +22,7 @@ class NetworkManager {
            return urlComponents.url
        }
     
-    func fetchBooks(word: String) {
+    func fetchBooks(word: String, searchViewController: SearchViewController) {
         guard let url = getURLForBooks(word: word) else {
             return
         }
@@ -63,17 +61,17 @@ class NetworkManager {
                  """)
             
             DispatchQueue.main.async {
-                self?.handleReceivedData(data: data)
+                self?.handleReceivedData(data: data, searchViewController: searchViewController)
             }
         }
         
         dataTask.resume()
     }
     
-    func handleReceivedData(data: Data) {
+    func handleReceivedData(data: Data, searchViewController: SearchViewController) {
             do {
                 let bookResponse = try JSONDecoder().decode(BookResponse.self, from: data)
-                print(bookResponse)
+                searchViewController.books = bookResponse.items
             } catch {
                 print("Failed to deserialize json data")
             }
