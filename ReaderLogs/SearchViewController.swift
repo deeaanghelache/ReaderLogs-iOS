@@ -6,13 +6,21 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SearchViewController: UIViewController {
     
     // MARK: Variables
     let searchBarView = UISearchBar()
     let tableView = UITableView()
+    let networkManager = NetworkManager()
 
+    public var books = [Book]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -85,8 +93,10 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if (searchText != "") {
-            // functia de api
+            // Api Requests
             tableView.isHidden = false
+            
+            networkManager.fetchBooks(word: searchText, searchViewController: self)
         } else {
             tableView.isHidden = true
         }
@@ -95,13 +105,20 @@ extension SearchViewController: UISearchBarDelegate {
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10;
-//        return userBooks.count
+        return books.count;
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: BookCellTableView.bookCellTableView,
                                                             for: indexPath) as? BookCellTableView {
+            let book = books[indexPath.row]
+            cell.cellBookTitleLabel.text = book.volumeInfo.title
+            cell.cellBookAuthor.text = book.volumeInfo.authors?.joined(separator: " and ")
+            cell.cellBookCoverView.kf.cancelDownloadTask()
+            cell.cellBookCoverView.image = nil
+            let imageUrl = URL(string: book.volumeInfo.imageLinks.smallThumbnail ?? "image")
+            cell.cellBookCoverView.kf.setImage(with: imageUrl)
+            
                     return cell
                 } else {
                     return UITableViewCell()
