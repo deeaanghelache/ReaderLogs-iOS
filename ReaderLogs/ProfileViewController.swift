@@ -9,21 +9,31 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
+    let labelView = UILabel()
+    let profileImageView = ProfileIconView(frame: CGRect(x: 125, y: 125, width: 150, height: 150))
+    let nameLabelView = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "Profile"
+        
+        profileImageView.layer.borderColor = UIColor.lightGray.cgColor
+        profileImageView.layer.borderWidth = 2.0
+        profileImageView.parentViewController = self
+        profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
+        profileImageView.tintColor = .lightGray
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.isUserInteractionEnabled = true
+        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+        profileImageView.clipsToBounds = true
+        view.addSubview(profileImageView)
+        
+        // MARK: Constraints
+//        let constraints = [
+//
+//        ]
+//
+//        NSLayoutConstraint.activate(constraints)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
