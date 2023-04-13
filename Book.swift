@@ -17,6 +17,8 @@ struct VolumeInfo: Codable {
     let title: String
     let authors: [String]?
     let description: String?
+    let categories: [String]?
+    let pageCount: Int?
     let imageLinks: ImageLinks
 }
 
@@ -27,7 +29,12 @@ struct ImageLinks: Codable {
 
 struct Book: Codable {
     let id: String
-    let categories: [String]?
-    let pageCount: Int?
     let volumeInfo: VolumeInfo
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.volumeInfo = try container.decode(VolumeInfo.self, forKey: .volumeInfo)
+    }
+    
 }
