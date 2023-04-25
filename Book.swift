@@ -20,6 +20,7 @@ struct VolumeInfo: Codable {
     let categories: [String]?
     let pageCount: Int?
     let imageLinks: ImageLinks
+    let publishedDate: String?
 }
 
 struct ImageLinks: Codable {

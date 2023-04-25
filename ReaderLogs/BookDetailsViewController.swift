@@ -8,62 +8,84 @@
 import UIKit
 import Kingfisher
 
+enum BookStatus: String {
+    case wantToRead = "Want to read"
+    case finished = "Finished"
+    case reading = "Reading"
+}
+
 class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
     var index: Int?
     var books = [Book]()
-    
     let scrollView = UIScrollView() // Replace view with scrollView
-    let contentView = UIView() // Add a contentView inside scrollView to hold all subviews
-    
     let bookCoverView = UIImageView()
-    let bookCoverBackgroundView = UIImageView()
     let bookTitleView = UILabel()
     let bookAuthorsView = UILabel()
     let bookPageCountView = UILabel()
     let bookDescriptionTitleView = UILabel()
     let bookDescriptionView = UITextView()
     let bookDetailsTitleView = UILabel()
-    let bookDetailsView = UITextView()
+    let bookDetailsView = UILabel()
     let bookReadingLogView = UILabel()
     let statusButton = UIButton()
     let line1 = UILabel()
     let line2 = UILabel()
+    let line3 = UILabel()
     let startedReading = UILabel()
     let finishedReading = UILabel()
     let updateProgressButton = UIButton()
+    let stackView = UIStackView()
+    var currentPageNumber = 0
+    var currentStatus = BookStatus.wantToRead
+    let progressView = UIProgressView(progressViewStyle: .bar)
+    let progressStack = UIStackView()
+    let progressPercentageView = UILabel()
+    var progressPercentage = 0.0
+    let starStackView = UIStackView()
+    var rating = 0
+    var starImageViews: [UIImageView] = []
+    let starFillImage = UIImage(systemName: "star.fill")
+    let starEmptyImage = UIImage(systemName: "star")
+    var currentPageCount = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
     
         let book = books[index ?? 0]
-        scrollView.backgroundColor = .white // Set background color for scrollView
+        if let count = book.volumeInfo.pageCount {
+            self.currentPageCount = count
+        }
+        view.backgroundColor = .white
+        scrollView.backgroundColor = .white
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.delegate = self // Set delegate to self
+        scrollView.delegate = self
         view.addSubview(scrollView)
-                
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView) // Add contentView inside scrollView
         
-        bookCoverBackgroundView.backgroundColor = .lightGray
-        bookCoverBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(bookCoverBackgroundView)
+        // Create a stack view
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 20
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        // Add stack view to the scroll view
+        scrollView.addSubview(stackView)
         
-        bookCoverView.backgroundColor = .black
+        bookCoverView.backgroundColor = .white
         bookCoverView.translatesAutoresizingMaskIntoConstraints = false
-        bookCoverView.layer.cornerRadius = 10
         bookCoverView.kf.cancelDownloadTask()
         bookCoverView.image = nil
         let imageUrl = URL(string: book.volumeInfo.imageLinks.thumbnail ?? "image")
         bookCoverView.kf.setImage(with: imageUrl)
-        bookCoverView.clipsToBounds = true
-        contentView.addSubview(bookCoverView)
+        bookCoverView.contentMode = .center
+//        bookCoverView.layer.cornerRadius = 10
+//        bookCoverView.clipsToBounds = true
+        stackView.addArrangedSubview(bookCoverView)
         
         bookTitleView.text = book.volumeInfo.title
         bookTitleView.font = UIFont.boldSystemFont(ofSize: 18)
         bookTitleView.translatesAutoresizingMaskIntoConstraints = false
         bookTitleView.textAlignment = .center
         bookTitleView.numberOfLines = 5
-        contentView.addSubview(bookTitleView)
+        stackView.addArrangedSubview(bookTitleView)
         
         if let authors = book.volumeInfo.authors {
             bookAuthorsView.text = "by \(authors.joined(separator: ", "))"
@@ -73,7 +95,7 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         bookAuthorsView.translatesAutoresizingMaskIntoConstraints = false
         bookAuthorsView.textAlignment = .center
         bookAuthorsView.numberOfLines = 3
-        contentView.addSubview(bookAuthorsView)
+        stackView.addArrangedSubview(bookAuthorsView)
         
         let menuStatusButtonClosure = { (action: UIAction) in
             self.updateStatus(value: action.title)
@@ -94,53 +116,92 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         statusButton.changesSelectionAsPrimaryAction = true
         statusButton.translatesAutoresizingMaskIntoConstraints = false
         statusButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(statusButton)
+        statusButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        stackView.addArrangedSubview(statusButton)
         
-//        ReadingLog
+//        RATING
+        starStackView.axis = .horizontal
+        starStackView.distribution = .fillProportionally
+        starStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        for index in 0...4 {
+            let starImageView = UIImageView()
+            starImageView.contentMode = .scaleAspectFit
+            starImageView.image = starEmptyImage
+            starStackView.addArrangedSubview(starImageView)
+            starImageViews.append(starImageView)
+
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(starTapped(_:)))
+            starImageViews[index].addGestureRecognizer(tapGesture)
+            starImageViews[index].isUserInteractionEnabled = true
+            starStackView.addArrangedSubview(starImageView)
+        }
+        stackView.addArrangedSubview(starStackView)
+        
+//        READING LOG
         line1.text = ""
         line1.layer.borderColor = UIColor.gray.cgColor
         line1.layer.borderWidth = 1.5
         line1.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
         line1.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(line1)
+        stackView.addArrangedSubview(line1)
         
 //        TODO: IF-URI
 //        reading
-        startedReading.text = "→ You started reading this book on 1 Apr 2023"
+        startedReading.text = "→ You started this book on 1 Apr 2023"
         startedReading.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(startedReading)
+        stackView.addArrangedSubview(startedReading)
 //        finished
         finishedReading.text = "→ You finished this book on 13 Apr 2023"
         finishedReading.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(finishedReading)
+        stackView.addArrangedSubview(finishedReading)
         
-//        Reading:
-//        Text
-//        Buton Update progress
+        // PROGRESS BAR + PERCENTAGE
+        progressStack.axis = .horizontal
+        progressStack.translatesAutoresizingMaskIntoConstraints = false
+        progressStack.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        progressStack.spacing = 10
+        stackView.addArrangedSubview(progressStack)
         
+        progressPercentage = Double(currentPageNumber) / Double(book.volumeInfo.pageCount!)
+        
+        progressView.setProgress(Float (progressPercentage), animated: false)
+        progressView.accessibilityIdentifier = "progressView"
+        progressView.layer.cornerRadius = 5
+        progressView.clipsToBounds = true
+        progressView.backgroundColor = .lightGray
+        progressView.tintColor = .systemYellow
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressStack.addArrangedSubview(progressView)
+        
+        let percentageInt = Int(progressPercentage * 100)
+        progressPercentageView.text = "\(percentageInt)%"
+        progressPercentageView.textColor = .black
+        progressStack.addArrangedSubview(progressPercentageView)
+        
+//        UPDATE PROGRESS BUTTON
         updateProgressButton.setTitle("Update progress", for: .normal)
-//        updateProgressButton.backgroundColor = .white
-//        updateProgressButton.layer.borderColor = UIColor.gray.cgColor
+        updateProgressButton.backgroundColor = .white
+        updateProgressButton.setTitleColor(.darkGray, for: .normal)
+        updateProgressButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        updateProgressButton.layer.borderColor = UIColor.darkGray.cgColor
+        updateProgressButton.layer.borderWidth = 1
         updateProgressButton.layer.cornerRadius = 5
         updateProgressButton.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(updateProgressButton)
-        
-//        Progress bar + procent
-        
-//        Finished:
-//        Text
-//        Rating
+        updateProgressButton.addTarget(self, action: #selector(updateProgress), for: .touchUpInside)
+        stackView.addArrangedSubview(updateProgressButton)
         
         line2.text = ""
         line2.layer.borderColor = UIColor.gray.cgColor
         line2.layer.borderWidth = 1.5
         line2.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
         line2.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(line2)
+        stackView.addArrangedSubview(line2)
         
-        bookDetailsTitleView.text = "Details"
+//        DETAILS
+        bookDetailsTitleView.text = "ℹ️ Details"
         bookDetailsTitleView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(bookDetailsTitleView)
+        stackView.addArrangedSubview(bookDetailsTitleView)
         
         let emptyText = "-"
         if let categories = book.volumeInfo.categories {
@@ -149,17 +210,35 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
             bookDetailsView.text = "Categories: \(emptyText)\n"
         }
         
-        if let nrOfPages = book.volumeInfo.pageCount {
-            bookDetailsView.text += "Page count: \(nrOfPages)"
+        if let publishedDate = book.volumeInfo.publishedDate {
+            bookDetailsView.text! += "Published date: \(publishedDate)\n"
         } else {
-            bookDetailsView.text += "Page count: \(emptyText)"
+            bookDetailsView.text! += "Published date: \(emptyText)\n"
         }
+        bookDetailsView.numberOfLines = 2
         bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(bookDetailsView)
+        stackView.addArrangedSubview(bookDetailsView)
         
+        if let nrOfPages = book.volumeInfo.pageCount {
+            bookDetailsView.text! += "Page count: \(nrOfPages)"
+        } else {
+            bookDetailsView.text! += "Page count: \(emptyText)"
+        }
+        bookDetailsView.numberOfLines = 3
+        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(bookDetailsView)
+        
+        line3.text = ""
+        line3.layer.borderColor = UIColor.gray.cgColor
+        line3.layer.borderWidth = 1.5
+        line3.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+        line3.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(line3)
+        
+//        DESCRIPTION
         bookDescriptionTitleView.text = "Description"
         bookDescriptionTitleView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(bookDescriptionTitleView)
+        stackView.addArrangedSubview(bookDescriptionTitleView)
 
         if let description = book.volumeInfo.description {
             bookDescriptionView.text = "\t\(description)"
@@ -170,112 +249,117 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         }
         bookDescriptionView.isEditable = false
         bookDescriptionView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(bookDescriptionView)
+        stackView.addArrangedSubview(bookDescriptionView)
+        
         
         // MARK: Constraints
         let constraints = [
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor), // Pin scrollView to view edges
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10), // Pin scrollView to view edges
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                       
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor), // Pin contentView to scrollView edges
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor), // Set contentView width equal to scrollView width
             
-            bookCoverBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0.0),
-            bookCoverBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0.0),
-            bookCoverBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0.0),
-            bookCoverBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -425.0),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            bookCoverView.leadingAnchor.constraint(equalTo: bookCoverBackgroundView.leadingAnchor, constant: 100.0),
-            bookCoverView.trailingAnchor.constraint(equalTo: bookCoverBackgroundView.trailingAnchor, constant: -100.0),
-            bookCoverView.topAnchor.constraint(equalTo: bookCoverBackgroundView.topAnchor, constant: 10.0),
-            bookCoverView.bottomAnchor.constraint(equalTo: bookCoverBackgroundView.bottomAnchor, constant: -15.0),
-            bookCoverView.heightAnchor.constraint(equalToConstant: 250),
-            
-            bookTitleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 50.0),
-            bookTitleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -50.0),
-            bookTitleView.topAnchor.constraint(equalTo: bookCoverBackgroundView.bottomAnchor, constant: 5.0),
-            bookTitleView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -375.0),
-            
-            bookAuthorsView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 50.0),
-            bookAuthorsView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -50.0),
-            bookAuthorsView.topAnchor.constraint(equalTo: bookTitleView.bottomAnchor, constant: 5.0),
-            bookAuthorsView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -350.0),
-            
-            statusButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 100.0),
-            statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -100.0),
-            statusButton.topAnchor.constraint(equalTo: bookAuthorsView.bottomAnchor, constant: 5.0),
-            statusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -300.0),
-            
+//            BOOK STATUS BUTTON
+            stackView.arrangedSubviews[3].leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 90.0),
+            stackView.arrangedSubviews[3].trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -90.0),
+
             statusButton.imageView!.leadingAnchor.constraint(equalTo: statusButton.leadingAnchor, constant: 10.0),
-            statusButton.imageView!.topAnchor.constraint(equalTo: statusButton.topAnchor, constant: 10.0),
-            statusButton.imageView!.bottomAnchor.constraint(equalTo: statusButton.bottomAnchor, constant: -10.0),
+            statusButton.imageView!.topAnchor.constraint(equalTo: statusButton.topAnchor, constant: 5.0),
+            statusButton.imageView!.bottomAnchor.constraint(equalTo: statusButton.bottomAnchor, constant: -5.0),
             
-            line1.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-            line1.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-            line1.topAnchor.constraint(equalTo: statusButton.bottomAnchor, constant: 15.0),
+            starStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 120.0),
+            starStackView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -120.0),
             
-            startedReading.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-            startedReading.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-            startedReading.topAnchor.constraint(equalTo: line1.bottomAnchor, constant: 10.0),
-            startedReading.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -250.0),
+            progressStack.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 10.0),
+            progressStack.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -10.0),
             
-            finishedReading.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-            finishedReading.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-            finishedReading.topAnchor.constraint(equalTo: line1.bottomAnchor, constant: 10.0),
-            finishedReading.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -250.0),
-            
-            updateProgressButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-            updateProgressButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-            updateProgressButton.topAnchor.constraint(equalTo: startedReading.bottomAnchor, constant: 10.0),
-            updateProgressButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -190.0),
-            
-            
-//            line2.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-//            line2.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-//            line2.topAnchor.constraint(equalTo: statusButton.bottomAnchor, constant: 15.0),
-            
-            
-//            bookDetailsTitleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-//            bookDetailsTitleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-//            bookDetailsTitleView.topAnchor.constraint(equalTo: statusButton.bottomAnchor, constant: 0.0),
-//            bookDetailsTitleView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -250.0),
-//
-//            bookDetailsView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-//            bookDetailsView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-//            bookDetailsView.topAnchor.constraint(equalTo: bookDetailsTitleView.bottomAnchor, constant: 5.0),
-//            bookDetailsView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -170.0),
-//
-//            bookDescriptionTitleView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-//            bookDescriptionTitleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-//            bookDescriptionTitleView.topAnchor.constraint(equalTo: bookDetailsView.bottomAnchor, constant: 5.0),
-//            bookDescriptionTitleView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -150.0),
-//
-//            bookDescriptionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0),
-//            bookDescriptionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10.0),
-//            bookDescriptionView.topAnchor.constraint(equalTo: bookDescriptionTitleView.bottomAnchor, constant: 5.0),
-//            bookDescriptionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-            
+            updateProgressButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 70.0),
+            updateProgressButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -70.0),
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
-    
+
     func updateStatus(value:String) {
         switch value {
         case "Want to Read":
+            currentStatus = BookStatus.wantToRead
             statusButton.backgroundColor = .systemGreen
+
         case "Reading":
+            currentStatus = BookStatus.reading
             statusButton.backgroundColor = .systemYellow
+            self.stackView.removeArrangedSubview(self.finishedReading)
+            viewDidLoad()
+            
         case "Finished":
+            currentStatus = BookStatus.finished
             statusButton.backgroundColor = .systemBlue
         default:
+            currentStatus = BookStatus.wantToRead
             statusButton.backgroundColor = .systemGreen
         }
     }
+    
+    @objc
+    func updateProgress(sender: UIButton!) {
+        // create the actual alert controller view that will be the pop-up
+        let alertController = UIAlertController(title: "Update your progress", message: "What's your current page number?", preferredStyle: .alert)
 
+        alertController.addTextField { (textField) in
+            // configure the properties of the text field
+            textField.placeholder = "Page number"
+        }
+
+        // add the buttons/actions to the view controller
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+
+            // this code runs when the user hits the "save" button
+            if let inputNumber = alertController.textFields![0].text {
+                if let number = Int(inputNumber) {
+                    if number > 0 {
+                        self.currentPageNumber = number
+                        self.progressPercentage = Double(self.currentPageNumber) / Double(self.currentPageCount)
+                        self.progressView.setProgress(Float(self.progressPercentage), animated: true)
+                        self.progressPercentageView.text = "\(Int(self.progressPercentage * 100))%"
+//                        let progress = self.progressStack.viewWithTag("progressView".hash).setProgress(currentPageNumber, animated: false)
+//                        self.viewDidLoad()
+                        
+                    }
+                } else {
+                    self.currentPageNumber = 0
+                }
+            }
+        }
+
+        alertController.addAction(cancelAction)
+        alertController.addAction(saveAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+
+    @objc func starTapped(_ gesture: UITapGestureRecognizer) {
+        guard let tappedStar = gesture.view as? UIImageView else { return }
+
+        // Get the index of the tapped star
+        if let tappedIndex = starImageViews.firstIndex(of: tappedStar) {
+            // Update the star images based on tapped star index
+            for index in 0..<starImageViews.count {
+                if index <= tappedIndex {
+                    // Fill the stars up to the tapped star
+                    starImageViews[index].image = starFillImage
+                } else {
+                    // Empty the stars after the tapped star
+                    starImageViews[index].image = starEmptyImage
+                }
+            }
+        }
+    }
 }
