@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		901A889129DACFDA004C5E55 /* BookCellTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A889029DACFDA004C5E55 /* BookCellTableView.swift */; };
 		9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */; };
 		9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */; };
 		9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */; };
+		90637B5429E2BBEF00A8D13C /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90637B5329E2BBEF00A8D13C /* SearchViewController.swift */; };
+		90637B5729E2FC6E00A8D13C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 90637B5629E2FC6E00A8D13C /* Kingfisher */; };
 		90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09929D8142A000F24D2 /* AppDelegate.swift */; };
 		90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */; };
 		90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D5A09D29D8142A000F24D2 /* ViewController.swift */; };
@@ -17,12 +20,18 @@
 		90D5A0A329D8142D000F24D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A0A229D8142D000F24D2 /* Assets.xcassets */; };
 		90D5A0A629D8142D000F24D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */; };
 		DD9DAA0F29DCA86100F7CB0F /* SummaryProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */; };
+		90EE8D3929E56B9800EF910D /* ProfileIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EE8D3829E56B9800EF910D /* ProfileIconView.swift */; };
+		C31E989D29E2A37800615190 /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31E989C29E2A37800615190 /* ApiKey.swift */; };
+		C38B3A0629DAD9330069C09C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38B3A0529DAD9330069C09C /* NetworkManager.swift */; };
+		C38B3A0A29DAD96E0069C09C /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38B3A0929DAD96E0069C09C /* Book.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		901A889029DACFDA004C5E55 /* BookCellTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCellTableView.swift; sourceTree = "<group>"; };
 		9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
 		9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		90637B5329E2BBEF00A8D13C /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		90D5A09629D8142A000F24D2 /* ReaderLogs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReaderLogs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90D5A09929D8142A000F24D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +41,10 @@
 		90D5A0A529D8142D000F24D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		90D5A0A729D8142D000F24D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryProgressView.swift; sourceTree = "<group>"; };
+		90EE8D3829E56B9800EF910D /* ProfileIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconView.swift; sourceTree = "<group>"; };
+		C31E989C29E2A37800615190 /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = SOURCE_ROOT; };
+		C38B3A0529DAD9330069C09C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		C38B3A0929DAD96E0069C09C /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90637B5729E2FC6E00A8D13C /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,10 +78,14 @@
 		90D5A09829D8142A000F24D2 /* ReaderLogs */ = {
 			isa = PBXGroup;
 			children = (
+				90637B5329E2BBEF00A8D13C /* SearchViewController.swift */,
+				C31E989C29E2A37800615190 /* ApiKey.swift */,
+				C38B3A0929DAD96E0069C09C /* Book.swift */,
 				90D5A09929D8142A000F24D2 /* AppDelegate.swift */,
 				90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */,
 				90D5A09D29D8142A000F24D2 /* ViewController.swift */,
 				90D5A09F29D8142A000F24D2 /* Main.storyboard */,
+				901A889029DACFDA004C5E55 /* BookCellTableView.swift */,
 				9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */,
 				9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */,
 				DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */,
@@ -75,6 +93,8 @@
 				90D5A0A229D8142D000F24D2 /* Assets.xcassets */,
 				90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */,
 				90D5A0A729D8142D000F24D2 /* Info.plist */,
+				C38B3A0529DAD9330069C09C /* NetworkManager.swift */,
+				90EE8D3829E56B9800EF910D /* ProfileIconView.swift */,
 			);
 			path = ReaderLogs;
 			sourceTree = "<group>";
@@ -95,6 +115,9 @@
 			dependencies = (
 			);
 			name = ReaderLogs;
+			packageProductDependencies = (
+				90637B5629E2FC6E00A8D13C /* Kingfisher */,
+			);
 			productName = ReaderLogs;
 			productReference = 90D5A09629D8142A000F24D2 /* ReaderLogs.app */;
 			productType = "com.apple.product-type.application";
@@ -123,6 +146,9 @@
 				Base,
 			);
 			mainGroup = 90D5A08D29D8142A000F24D2;
+			packageReferences = (
+				90637B5529E2FC6E00A8D13C /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = 90D5A09729D8142A000F24D2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -152,10 +178,16 @@
 			files = (
 				9040DE0029D9CD65007A23CD /* ProfileViewController.swift in Sources */,
 				DD9DAA0F29DCA86100F7CB0F /* SummaryProgressView.swift in Sources */,
+				90637B5429E2BBEF00A8D13C /* SearchViewController.swift in Sources */,
 				9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */,
 				90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */,
+				C38B3A0629DAD9330069C09C /* NetworkManager.swift in Sources */,
 				9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */,
+				C38B3A0A29DAD96E0069C09C /* Book.swift in Sources */,
+				901A889129DACFDA004C5E55 /* BookCellTableView.swift in Sources */,
 				90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */,
+				90EE8D3929E56B9800EF910D /* ProfileIconView.swift in Sources */,
+				C31E989D29E2A37800615190 /* ApiKey.swift in Sources */,
 				90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -374,6 +406,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		90637B5529E2FC6E00A8D13C /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		90637B5629E2FC6E00A8D13C /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 90637B5529E2FC6E00A8D13C /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 90D5A08E29D8142A000F24D2 /* Project object */;
 }

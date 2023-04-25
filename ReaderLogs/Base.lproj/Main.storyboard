@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KeS-PX-dCD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KeS-PX-dCD">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -38,7 +39,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wO9-PU-HTt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5468" y="520"/>
+            <point key="canvasLocation" x="5630" y="549"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="2xH-3N-ThI">
@@ -81,6 +82,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="KeS-PX-dCD" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OAY-gS-jdr">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -88,6 +90,7 @@
                         <segue destination="MFa-J7-Y1x" kind="relationship" relationship="viewControllers" id="PPF-NT-25A"/>
                         <segue destination="aMn-aR-CQk" kind="relationship" relationship="viewControllers" id="vLF-K8-b9u"/>
                         <segue destination="Fv2-sH-ajJ" kind="relationship" relationship="viewControllers" id="XRB-lD-n1A"/>
+                        <segue destination="IX9-a2-OXp" kind="relationship" relationship="viewControllers" id="PPp-Mh-84f"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DDj-Pe-HRX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -111,7 +114,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WuS-F3-FRl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4505" y="520"/>
+            <point key="canvasLocation" x="4505" y="549"/>
         </scene>
         <!--Profile-->
         <scene sceneID="c8H-QZ-1AM">
@@ -132,10 +135,46 @@
             </objects>
             <point key="canvasLocation" x="4505" y="-1150"/>
         </scene>
+        <!--Search Book Controller-->
+        <scene sceneID="uKC-p9-AgH">
+            <objects>
+                <viewController id="faO-zu-wVR" userLabel="Search Book Controller" customClass="SearchViewController" customModule="ReaderLogs" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EMS-nb-jMD">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="CXF-af-QYg"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="H48-cp-e7h"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o03-8z-W8w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5468" y="-1963"/>
+        </scene>
+        <!--Search-->
+        <scene sceneID="fiu-cn-AhX">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IX9-a2-OXp" userLabel="Search" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass" catalog="system" id="7nq-uU-vRO"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kaP-Th-Koh">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="faO-zu-wVR" kind="relationship" relationship="rootViewController" id="ZxA-uU-VRz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xsa-t7-I3A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4505" y="-1963"/>
+        </scene>
     </scenes>
     <resources>
         <image name="books.vertical.fill" catalog="system" width="128" height="110"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
