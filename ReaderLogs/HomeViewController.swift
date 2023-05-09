@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import FirebaseAuthUI
 
 //TODO: make it responsive for smaller screens (maybe use UITableView)
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, FUIAuthDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +53,14 @@ class HomeViewController: UIViewController {
         ]
         
         NSLayoutConstraint.activate(constaints)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.present((FUIAuth.defaultAuthUI()?.authViewController())!, animated: true) {
+            NSLog("%@", "presented auth form")
+        }
     }
 
     /*
