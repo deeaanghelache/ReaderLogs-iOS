@@ -128,6 +128,9 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // aici cod pt details
+        let bookDetailsViewController = BookDetailsViewController()
+        bookDetailsViewController.index = indexPath.row
+        bookDetailsViewController.books = books
+        navigationController?.pushViewController(bookDetailsViewController, animated: true)
     }
 }
