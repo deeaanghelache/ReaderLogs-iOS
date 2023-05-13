@@ -57,10 +57,6 @@ class HomeViewController: UIViewController, FUIAuthDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        self.present((FUIAuth.defaultAuthUI()?.authViewController())!, animated: true) {
-            NSLog("%@", "presented auth form")
-        }
     }
 
     /*

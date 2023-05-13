@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FUIAuthDelegate {
         actionCodeSettings.url = URL(string: "https://example.appspot.com")
         actionCodeSettings.handleCodeInApp = true
         actionCodeSettings.setAndroidPackageName("com.firebase.example", installIfNotAvailable: false, minimumVersion: "12")
-        
+
         authUI?.providers = [
             FUIGoogleAuth(authUI: authUI!),
             FUIEmailAuth(
@@ -59,6 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FUIAuthDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    
+    // MARK: UIApplicationDelegate
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
 
@@ -71,5 +73,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FUIAuthDelegate {
         return false
     }
 
-}
+    // MARK: FUIAuthDelegate
 
+    func authPickerViewController(forAuthUI authUI: FUIAuth) -> FUIAuthPickerViewController {
+        return CustomAuthPickerViewController(authUI: authUI)
+    }
+    
+    func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
+
+        if let error = error {
+            NSLog("Encountered error during sign in: %@", error.localizedDescription)
+            return
+        }
+
+        guard let window = UIApplication.shared.keyWindow else {
+            return
+        }
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        window.rootViewController = storyboard.instantiateInitialViewController()
+
+        UIView.transition(with: window, duration: 0.3, animations: {})
+    }
+}

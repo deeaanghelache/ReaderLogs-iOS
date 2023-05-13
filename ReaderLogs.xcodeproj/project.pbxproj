@@ -13,6 +13,9 @@
 		428BADA129F7101A00C7EA1C /* FirebaseAuthUI in Frameworks */ = {isa = PBXBuildFile; productRef = 428BADA029F7101A00C7EA1C /* FirebaseAuthUI */; };
 		428BADA329F7101A00C7EA1C /* FirebaseEmailAuthUI in Frameworks */ = {isa = PBXBuildFile; productRef = 428BADA229F7101A00C7EA1C /* FirebaseEmailAuthUI */; };
 		428BADA529F7101A00C7EA1C /* FirebaseGoogleAuthUI in Frameworks */ = {isa = PBXBuildFile; productRef = 428BADA429F7101A00C7EA1C /* FirebaseGoogleAuthUI */; };
+		42B97CDF2A0FE68A00238F5D /* CustomAuthPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B97CDE2A0FE68A00238F5D /* CustomAuthPickerViewController.swift */; };
+		42B97CE22A0FEEA500238F5D /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 42B97CE12A0FEEA500238F5D /* NVActivityIndicatorView */; };
+		42B97CE62A0FEF5500238F5D /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B97CE52A0FEF5500238F5D /* LaunchViewController.swift */; };
 		42DE648A29F855F3007755BD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42DE648929F855F3007755BD /* GoogleService-Info.plist */; };
 		901A889129DACFDA004C5E55 /* BookCellTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A889029DACFDA004C5E55 /* BookCellTableView.swift */; };
 		9040DDFC29D9CBED007A23CD /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */; };
@@ -35,6 +38,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		42B97CDE2A0FE68A00238F5D /* CustomAuthPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAuthPickerViewController.swift; sourceTree = "<group>"; };
+		42B97CE52A0FEF5500238F5D /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		42DE648929F855F3007755BD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		901A889029DACFDA004C5E55 /* BookCellTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCellTableView.swift; sourceTree = "<group>"; };
 		9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
@@ -62,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42B97CE22A0FEEA500238F5D /* NVActivityIndicatorView in Frameworks */,
 				428BADA329F7101A00C7EA1C /* FirebaseEmailAuthUI in Frameworks */,
 				421F1AA229F44D8900981455 /* FirebaseDatabase in Frameworks */,
 				421F1AA429F44D8900981455 /* FirebaseFirestore in Frameworks */,
@@ -94,25 +100,27 @@
 		90D5A09829D8142A000F24D2 /* ReaderLogs */ = {
 			isa = PBXGroup;
 			children = (
-				C31E98A029E30FE000615190 /* BookDetailsViewController.swift */,
-				90637B5329E2BBEF00A8D13C /* SearchViewController.swift */,
 				C31E989C29E2A37800615190 /* ApiKey.swift */,
-				42DE648929F855F3007755BD /* GoogleService-Info.plist */,
-				C38B3A0929DAD96E0069C09C /* Book.swift */,
 				90D5A09929D8142A000F24D2 /* AppDelegate.swift */,
-				90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */,
-				90D5A09D29D8142A000F24D2 /* ViewController.swift */,
-				90D5A09F29D8142A000F24D2 /* Main.storyboard */,
-				901A889029DACFDA004C5E55 /* BookCellTableView.swift */,
-				9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */,
-				9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */,
-				DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */,
-				9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */,
 				90D5A0A229D8142D000F24D2 /* Assets.xcassets */,
-				90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */,
+				C38B3A0929DAD96E0069C09C /* Book.swift */,
+				901A889029DACFDA004C5E55 /* BookCellTableView.swift */,
+				C31E98A029E30FE000615190 /* BookDetailsViewController.swift */,
+				9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */,
+				42B97CDE2A0FE68A00238F5D /* CustomAuthPickerViewController.swift */,
+				42DE648929F855F3007755BD /* GoogleService-Info.plist */,
+				9040DDFD29D9CD4D007A23CD /* HomeViewController.swift */,
 				90D5A0A729D8142D000F24D2 /* Info.plist */,
+				90D5A0A429D8142D000F24D2 /* LaunchScreen.storyboard */,
+				42B97CE52A0FEF5500238F5D /* LaunchViewController.swift */,
+				90D5A09F29D8142A000F24D2 /* Main.storyboard */,
 				C38B3A0529DAD9330069C09C /* NetworkManager.swift */,
 				90EE8D3829E56B9800EF910D /* ProfileIconView.swift */,
+				9040DDFF29D9CD65007A23CD /* ProfileViewController.swift */,
+				90D5A09B29D8142A000F24D2 /* SceneDelegate.swift */,
+				90637B5329E2BBEF00A8D13C /* SearchViewController.swift */,
+				DD9DAA0E29DCA86100F7CB0F /* SummaryProgressView.swift */,
+				90D5A09D29D8142A000F24D2 /* ViewController.swift */,
 			);
 			path = ReaderLogs;
 			sourceTree = "<group>";
@@ -141,6 +149,7 @@
 				428BADA029F7101A00C7EA1C /* FirebaseAuthUI */,
 				428BADA229F7101A00C7EA1C /* FirebaseEmailAuthUI */,
 				428BADA429F7101A00C7EA1C /* FirebaseGoogleAuthUI */,
+				42B97CE12A0FEEA500238F5D /* NVActivityIndicatorView */,
 			);
 			productName = ReaderLogs;
 			productReference = 90D5A09629D8142A000F24D2 /* ReaderLogs.app */;
@@ -174,6 +183,7 @@
 				90637B5529E2FC6E00A8D13C /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				421F1A9E29F44D8900981455 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				428BAD9F29F7101A00C7EA1C /* XCRemoteSwiftPackageReference "FirebaseUI-iOS" */,
+				42B97CE02A0FEEA500238F5D /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
 			);
 			productRefGroup = 90D5A09729D8142A000F24D2 /* Products */;
 			projectDirPath = "";
@@ -215,8 +225,10 @@
 				90D5A09A29D8142A000F24D2 /* AppDelegate.swift in Sources */,
 				90EE8D3929E56B9800EF910D /* ProfileIconView.swift in Sources */,
 				C31E989D29E2A37800615190 /* ApiKey.swift in Sources */,
+				42B97CDF2A0FE68A00238F5D /* CustomAuthPickerViewController.swift in Sources */,
 				C31E98A129E30FE000615190 /* BookDetailsViewController.swift in Sources */,
 				90D5A09C29D8142A000F24D2 /* SceneDelegate.swift in Sources */,
+				42B97CE62A0FEF5500238F5D /* LaunchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,6 +464,14 @@
 				kind = branch;
 			};
 		};
+		42B97CE02A0FEEA500238F5D /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ninjaprox/NVActivityIndicatorView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		90637B5529E2FC6E00A8D13C /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -492,6 +512,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 428BAD9F29F7101A00C7EA1C /* XCRemoteSwiftPackageReference "FirebaseUI-iOS" */;
 			productName = FirebaseGoogleAuthUI;
+		};
+		42B97CE12A0FEEA500238F5D /* NVActivityIndicatorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42B97CE02A0FEEA500238F5D /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */;
+			productName = NVActivityIndicatorView;
 		};
 		90637B5629E2FC6E00A8D13C /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
