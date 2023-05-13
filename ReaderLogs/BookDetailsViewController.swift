@@ -291,19 +291,39 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         case "Want to Read":
             currentStatus = BookStatus.wantToRead
             statusButton.backgroundColor = .systemGreen
+            startedReading.isHidden = true
+            finishedReading.isHidden = true
+            progressStack.isHidden = true
+            updateProgressButton.isHidden = true
+            line2.isHidden = true
 
         case "Reading":
             currentStatus = BookStatus.reading
             statusButton.backgroundColor = .systemYellow
-            self.stackView.removeArrangedSubview(self.finishedReading)
-            viewDidLoad()
-            
+            startedReading.isHidden = false
+            finishedReading.isHidden = true
+            progressStack.isHidden = false
+            updateProgressButton.isHidden = false
+            line2.isHidden = false
+
         case "Finished":
             currentStatus = BookStatus.finished
             statusButton.backgroundColor = .systemBlue
+            startedReading.isHidden = false
+            finishedReading.isHidden = false
+            progressStack.isHidden = false
+            progressStack.isHidden = false
+            updateProgressButton.isHidden = false
+            line2.isHidden = false
+            
         default:
             currentStatus = BookStatus.wantToRead
             statusButton.backgroundColor = .systemGreen
+            startedReading.isHidden = true
+            finishedReading.isHidden = true
+            progressStack.isHidden = true
+            updateProgressButton.isHidden = true
+            line2.isHidden = true
         }
     }
     
