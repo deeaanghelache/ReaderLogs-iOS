@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>539766829985-mqpc0pkbfiqln36v2ess8t8e5klpft7p.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.539766829985-mqpc0pkbfiqln36v2ess8t8e5klpft7p</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCs4cF7UCHX-9YLiCi04jgGzhQfYvntRTg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>539766829985</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.unibuc.project2023.ReaderLogs</string>
+	<key>PROJECT_ID</key>
+	<string>readerlogs-ios</string>
+	<key>STORAGE_BUCKET</key>
+	<string>readerlogs-ios.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:539766829985:ios:90a20b99ed3bb1ce26d1e0</string>
+	<key>DATABASE_URL</key>
+	<string>https://readerlogs-ios-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>

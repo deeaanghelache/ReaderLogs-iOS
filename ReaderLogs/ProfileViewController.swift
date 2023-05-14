@@ -5,29 +5,31 @@
 //  Created by Andreea Anghelache on 02.04.2023.
 //
 
+import FirebaseAuth
 import UIKit
 
 class ProfileViewController: UIViewController {
 
     let labelView = UILabel()
     let profileImageView = ProfileIconView(frame: CGRect(x: 125, y: 125, width: 150, height: 150))
+
     let nameView = UILabel()
-    let usernameView = UILabel()
     let emailView = UILabel()
     let stackView = UIStackView()
     let challengeLabel = UILabel()
+
     let line1 = UILabel()
-    let line2 = UILabel()
     let line3 = UILabel()
+
     let divider = UILabel()
     let horizontalStack1 = UIStackView()
-    let horizontalStack2 = UIStackView()
     let horizontalStack3 = UIStackView()
     let nameIcon = UIImageView()
-    let usernameIcon = UIImageView()
     let emailIcon = UIImageView()
-    let challengeButton = UIButton()
-    var challenge = false
+
+    let challengeButton = UIButton(type: .system)
+    let signOutButton = UIButton(type: .system)
+
     var maxNumberOfBooks : Int = 0
     var currentNumberOfBooksRead : Int = 2
     
@@ -74,7 +76,7 @@ class ProfileViewController: UIViewController {
         nameIcon.widthAnchor.constraint(equalToConstant: 25.0).isActive = true
         horizontalStack1.addArrangedSubview(nameIcon)
         
-        nameView.text = "Popescu Ion"
+        nameView.text = Auth.auth().currentUser?.displayName
         nameView.numberOfLines = 1
         nameView.font = UIFont.systemFont(ofSize: 18.0)
         horizontalStack1.addArrangedSubview(nameView)
@@ -86,38 +88,17 @@ class ProfileViewController: UIViewController {
         line1.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
         stackView.addArrangedSubview(line1)
         
-        horizontalStack2.axis = .horizontal
-        horizontalStack2.distribution = .fillProportionally
-        horizontalStack2.translatesAutoresizingMaskIntoConstraints = false
-        horizontalStack2.spacing = 10.0
-        stackView.addArrangedSubview(horizontalStack2)
-        
-        usernameIcon.image = UIImage(systemName: "at")
-        usernameIcon.widthAnchor.constraint(equalToConstant: 25.0).isActive = true
-        horizontalStack2.addArrangedSubview(usernameIcon)
-        
-        usernameView.text = "username"
-        usernameView.font = UIFont.systemFont(ofSize: 18.0)
-        horizontalStack2.addArrangedSubview(usernameView)
-        
-        line2.backgroundColor = .lightGray
-        line2.layer.borderColor = UIColor.gray.cgColor
-        line2.layer.borderWidth = 1.5
-        line2.translatesAutoresizingMaskIntoConstraints = false
-        line2.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
-        stackView.addArrangedSubview(line2)
-        
         horizontalStack3.axis = .horizontal
         horizontalStack3.distribution = .fillProportionally
         horizontalStack3.translatesAutoresizingMaskIntoConstraints = false
         horizontalStack3.spacing = 10.0
         stackView.addArrangedSubview(horizontalStack3)
-        
+
         emailIcon.image = UIImage(systemName: "envelope")
         emailIcon.widthAnchor.constraint(equalToConstant: 25.0).isActive = true
         horizontalStack3.addArrangedSubview(emailIcon)
-        
-        emailView.text = "email"
+
+        emailView.text = Auth.auth().currentUser?.email
         emailView.font = UIFont.systemFont(ofSize: 18.0)
         horizontalStack3.addArrangedSubview(emailView)
         
@@ -127,21 +108,27 @@ class ProfileViewController: UIViewController {
         line3.translatesAutoresizingMaskIntoConstraints = false
         line3.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
         stackView.addArrangedSubview(line3)
-    
-        if (challenge) {
-            challengeLabel.text = "You have read \(currentNumberOfBooksRead)/\(maxNumberOfBooks) books this year!"
-            challengeLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
-            challengeLabel.textAlignment = .center
-            challengeLabel.textColor = .systemBlue
-            stackView.addArrangedSubview(challengeLabel)
-        } else {
-            challengeButton.setTitle("Add a challenge", for: .normal)
-            challengeButton.backgroundColor = .systemGreen
-            challengeButton.layer.cornerRadius = 5.0
-            challengeButton.addTarget(self, action: #selector(addChallenge), for: .touchUpInside)
-            stackView.addArrangedSubview(challengeButton)
-        }
-        
+
+        challengeLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
+        challengeLabel.textAlignment = .center
+        challengeLabel.textColor = .systemBlue
+        challengeLabel.isHidden = true
+        stackView.addArrangedSubview(challengeLabel)
+
+        challengeButton.setTitle("Add a challenge", for: .normal)
+        challengeButton.setTitleColor(.white, for: .normal)
+        challengeButton.backgroundColor = .systemGreen
+        challengeButton.layer.cornerRadius = 5.0
+        challengeButton.addTarget(self, action: #selector(addChallenge), for: .touchUpInside)
+        stackView.addArrangedSubview(challengeButton)
+
+        signOutButton.setTitle("Sign Out", for: .normal)
+        signOutButton.setTitleColor(.white, for: .normal)
+        signOutButton.backgroundColor = .systemRed
+        signOutButton.layer.cornerRadius = 5.0
+        signOutButton.addTarget(self, action: #selector(didTapSignOut), for: .touchUpInside)
+        stackView.addArrangedSubview(signOutButton)
+
         // MARK: Constraints
         let constraints = [
             labelView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -50.0),
@@ -157,9 +144,8 @@ class ProfileViewController: UIViewController {
 
         NSLayoutConstraint.activate(constraints)
     }
-    
-    @objc
-    func addChallenge(sender: UIButton!) {
+
+    @objc func addChallenge(sender: UIButton!) {
         // create the actual alert controller view that will be the pop-up
         let alertController = UIAlertController(title: "Set your reading challenge", message: "How many books would you like to read?", preferredStyle: .alert)
 
@@ -177,10 +163,7 @@ class ProfileViewController: UIViewController {
                 if let number = Int(inputNumber) {
                     if number > 0 {
                         self.maxNumberOfBooks = number
-                        self.challenge = true
-                        self.stackView.removeArrangedSubview(self.challengeButton)
-                        self.challengeButton.removeFromSuperview()
-                        self.viewDidLoad()
+                        self.showChallengeLabel()
                     }
                 } else {
                     self.maxNumberOfBooks = 0
@@ -193,5 +176,24 @@ class ProfileViewController: UIViewController {
         alertController.addAction(saveAction)
 
         present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func didTapSignOut(sender: UIButton) {
+
+        do {
+            try Auth.auth().signOut()
+            (self.view.window?.rootViewController as! UINavigationController).popToRootViewController(animated: true)
+        } catch let error as NSError {
+            NSLog("Encountered error during sign out: %@", error.localizedDescription)
+        }
+    }
+    
+    func showChallengeLabel() {
+
+        challengeLabel.text = "You have read \(currentNumberOfBooksRead)/\(maxNumberOfBooks) books this year!"
+        challengeLabel.isHidden = false
+        challengeButton.isHidden = true
+
+        view.layoutIfNeeded()
     }
 }
