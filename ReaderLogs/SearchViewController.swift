@@ -15,7 +15,7 @@ class SearchViewController: UIViewController {
     let tableView = UITableView()
     let networkManager = NetworkManager()
 
-    public var books = [Book]() {
+    public var books = [GoogleBookModel]() {
         didSet {
             tableView.reloadData()
         }
@@ -127,10 +127,12 @@ extension SearchViewController: UITableViewDataSource {
 }
 
 extension SearchViewController: UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         let bookDetailsViewController = BookDetailsViewController()
-        bookDetailsViewController.index = indexPath.row
-        bookDetailsViewController.books = books
+        bookDetailsViewController.bookViewModel = BookViewModel(books[indexPath.row])
+
         navigationController?.pushViewController(bookDetailsViewController, animated: true)
     }
 }

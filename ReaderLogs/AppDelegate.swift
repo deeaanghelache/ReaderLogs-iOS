@@ -7,18 +7,15 @@
 
 import UIKit
 import FirebaseAuth
-import FirebaseGoogleAuthUI
-import FirebaseCore
-import FirebaseFirestore
-import FirebaseDatabase
 import FirebaseAuthUI
 import FirebaseEmailAuthUI
+import FirebaseGoogleAuthUI
+import FirebaseCore
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, FUIAuthDelegate {
 
     var window: UIWindow?
-    var ref: DatabaseReference!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -42,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FUIAuthDelegate {
             ),
         ]
 
-        ref = Database.database(url: "https://readerlogs-ios-default-rtdb.europe-west1.firebasedatabase.app/").reference()
         return true
     }
 

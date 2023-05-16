@@ -8,15 +8,10 @@
 import UIKit
 import Kingfisher
 
-enum BookStatus: String {
-    case wantToRead = "Want to read"
-    case finished = "Finished"
-    case reading = "Reading"
-}
-
 class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
-    var index: Int?
-    var books = [Book]()
+
+    var bookViewModel: BookViewModel?
+
     let scrollView = UIScrollView() // Replace view with scrollView
     let bookCoverView = UIImageView()
     let bookTitleView = UILabel()
@@ -50,11 +45,9 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        let book = books[index ?? 0]
-        if let count = book.volumeInfo.pageCount {
-            self.currentPageCount = count
-        }
+
+        self.currentPageCount = bookViewModel!.pagesTotal ?? 0
+
         view.backgroundColor = .white
         scrollView.backgroundColor = .white
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -73,44 +66,47 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         bookCoverView.translatesAutoresizingMaskIntoConstraints = false
         bookCoverView.kf.cancelDownloadTask()
         bookCoverView.image = nil
-        let imageUrl = URL(string: book.volumeInfo.imageLinks.thumbnail ?? "image")
-        bookCoverView.kf.setImage(with: imageUrl)
+        
+        if let cover = bookViewModel!.cover {
+            bookCoverView.kf.setImage(with: URL(string: cover))
+        } else {
+            bookCoverView.image = UIImage(named: "placeholderImage")
+        }
+
         bookCoverView.contentMode = .center
 //        bookCoverView.layer.cornerRadius = 10
 //        bookCoverView.clipsToBounds = true
         stackView.addArrangedSubview(bookCoverView)
         
-        bookTitleView.text = book.volumeInfo.title
+        bookTitleView.text = bookViewModel!.title
         bookTitleView.font = UIFont.boldSystemFont(ofSize: 18)
         bookTitleView.translatesAutoresizingMaskIntoConstraints = false
         bookTitleView.textAlignment = .center
         bookTitleView.numberOfLines = 5
         stackView.addArrangedSubview(bookTitleView)
-        
-        if let authors = book.volumeInfo.authors {
-            bookAuthorsView.text = "by \(authors.joined(separator: ", "))"
-        } else {
-            bookAuthorsView.text = "unknown author"
-        }
+
+        bookAuthorsView.text = "by \(bookViewModel!.author)"
         bookAuthorsView.translatesAutoresizingMaskIntoConstraints = false
         bookAuthorsView.textAlignment = .center
         bookAuthorsView.numberOfLines = 3
         stackView.addArrangedSubview(bookAuthorsView)
         
         let menuStatusButtonClosure = { (action: UIAction) in
+            self.bookViewModel?.updateStatus(BookStatus(rawValue: action.title)!)
             self.updateStatus(value: action.title)
         }
         statusButton.menu = UIMenu(children: [
-            UIAction(title: "Want to Read", state: .on, handler: menuStatusButtonClosure),
-            UIAction(title: "Reading", handler: menuStatusButtonClosure),
-            UIAction(title: "Finished", handler: menuStatusButtonClosure)
+            UIAction(title: BookStatus.none.rawValue, state: .on, handler: menuStatusButtonClosure),
+            UIAction(title: BookStatus.wantToRead.rawValue, handler: menuStatusButtonClosure),
+            UIAction(title: BookStatus.reading.rawValue, handler: menuStatusButtonClosure),
+            UIAction(title: BookStatus.finished.rawValue, handler: menuStatusButtonClosure)
         ])
         statusButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         let downArrowImage = UIImage(systemName: "chevron.down")
         statusButton.setImage(downArrowImage, for: .normal)
         statusButton.semanticContentAttribute = .forceRightToLeft
         statusButton.tintColor = .white
-        statusButton.backgroundColor = .systemGreen
+        statusButton.backgroundColor = .systemGray
         statusButton.layer.cornerRadius = 5
         statusButton.showsMenuAsPrimaryAction = true
         statusButton.changesSelectionAsPrimaryAction = true
@@ -118,6 +114,10 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         statusButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
         statusButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
         stackView.addArrangedSubview(statusButton)
+
+        self.updateStatus(value: BookStatus.none.rawValue)
+
+        // TODO: rating just when status = .finished
         
 //        RATING
         starStackView.axis = .horizontal
@@ -163,8 +163,12 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         progressStack.spacing = 10
         stackView.addArrangedSubview(progressStack)
         
-        progressPercentage = Double(currentPageNumber) / Double(book.volumeInfo.pageCount!)
-        
+        if let pagesTotal = bookViewModel!.pagesTotal {
+            progressPercentage = Double(bookViewModel!.pagesRead ?? 0) / Double(pagesTotal)
+        } else {
+            progressPercentage = 0.0
+        }
+
         progressView.setProgress(Float (progressPercentage), animated: false)
         progressView.accessibilityIdentifier = "progressView"
         progressView.layer.cornerRadius = 5
@@ -190,67 +194,43 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         updateProgressButton.translatesAutoresizingMaskIntoConstraints = false
         updateProgressButton.addTarget(self, action: #selector(updateProgress), for: .touchUpInside)
         stackView.addArrangedSubview(updateProgressButton)
-        
-        line2.text = ""
-        line2.layer.borderColor = UIColor.gray.cgColor
-        line2.layer.borderWidth = 1.5
-        line2.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
-        line2.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(line2)
-        
-//        DETAILS
-        bookDetailsTitleView.text = "ℹ️ Details"
-        bookDetailsTitleView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(bookDetailsTitleView)
-        
-        let emptyText = "-"
-        if let categories = book.volumeInfo.categories {
-            bookDetailsView.text = "Categories: \(categories.joined(separator: ", "))\n"
-        } else {
-            bookDetailsView.text = "Categories: \(emptyText)\n"
-        }
-        
-        if let publishedDate = book.volumeInfo.publishedDate {
-            bookDetailsView.text! += "Published date: \(publishedDate)\n"
-        } else {
-            bookDetailsView.text! += "Published date: \(emptyText)\n"
-        }
-        bookDetailsView.numberOfLines = 2
-        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(bookDetailsView)
-        
-        if let nrOfPages = book.volumeInfo.pageCount {
-            bookDetailsView.text! += "Page count: \(nrOfPages)"
-        } else {
-            bookDetailsView.text! += "Page count: \(emptyText)"
-        }
-        bookDetailsView.numberOfLines = 3
-        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(bookDetailsView)
-        
-        line3.text = ""
-        line3.layer.borderColor = UIColor.gray.cgColor
-        line3.layer.borderWidth = 1.5
-        line3.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
-        line3.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(line3)
-        
-//        DESCRIPTION
-        bookDescriptionTitleView.text = "Description"
-        bookDescriptionTitleView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(bookDescriptionTitleView)
 
-        if let description = book.volumeInfo.description {
-            bookDescriptionView.text = "\t\(description)"
+        if bookViewModel!.source == .googleBooks {
+
+            line2.text = ""
+            line2.layer.borderColor = UIColor.gray.cgColor
+            line2.layer.borderWidth = 1.5
+            line2.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+            line2.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(line2)
+
+            bookDetailsTitleView.text = "ℹ️ Details"
+            bookDetailsTitleView.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(bookDetailsTitleView)
+
+            bookDetailsView.text = bookViewModel!.details
+            bookDetailsView.numberOfLines = 3
+            bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(bookDetailsView)
+
+            line3.text = ""
+            line3.layer.borderColor = UIColor.gray.cgColor
+            line3.layer.borderWidth = 1.5
+            line3.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+            line3.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(line3)
+
+            bookDescriptionTitleView.text = "Description"
+            bookDescriptionTitleView.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(bookDescriptionTitleView)
+            
+            bookDescriptionView.text = bookViewModel!.bookDescription
             bookDescriptionView.textAlignment = .justified
             bookDescriptionView.isScrollEnabled = false
-        } else {
-            bookDescriptionView.text = emptyText
+            bookDescriptionView.isEditable = false
+            bookDescriptionView.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(bookDescriptionView)
         }
-        bookDescriptionView.isEditable = false
-        bookDescriptionView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(bookDescriptionView)
-        
         
         // MARK: Constraints
         let constraints = [
@@ -286,9 +266,19 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         NSLayoutConstraint.activate(constraints)
     }
 
-    func updateStatus(value:String) {
+    func updateStatus(value: String) {
+
         switch value {
-        case "Want to Read":
+        case BookStatus.none.rawValue:
+            currentStatus = BookStatus.none
+            statusButton.backgroundColor = .systemGray
+            startedReading.isHidden = true
+            finishedReading.isHidden = true
+            progressStack.isHidden = true
+            updateProgressButton.isHidden = true
+            line2.isHidden = true
+
+        case BookStatus.wantToRead.rawValue:
             currentStatus = BookStatus.wantToRead
             statusButton.backgroundColor = .systemGreen
             startedReading.isHidden = true
@@ -297,7 +287,7 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
             updateProgressButton.isHidden = true
             line2.isHidden = true
 
-        case "Reading":
+        case BookStatus.reading.rawValue:
             currentStatus = BookStatus.reading
             statusButton.backgroundColor = .systemYellow
             startedReading.isHidden = false
@@ -306,19 +296,18 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
             updateProgressButton.isHidden = false
             line2.isHidden = false
 
-        case "Finished":
+        case BookStatus.finished.rawValue:
             currentStatus = BookStatus.finished
             statusButton.backgroundColor = .systemBlue
             startedReading.isHidden = false
             finishedReading.isHidden = false
             progressStack.isHidden = false
-            progressStack.isHidden = false
-            updateProgressButton.isHidden = false
+            updateProgressButton.isHidden = true
             line2.isHidden = false
-            
+
         default:
-            currentStatus = BookStatus.wantToRead
-            statusButton.backgroundColor = .systemGreen
+            currentStatus = BookStatus.none
+            statusButton.backgroundColor = .none
             startedReading.isHidden = true
             finishedReading.isHidden = true
             progressStack.isHidden = true
@@ -326,7 +315,7 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
             line2.isHidden = true
         }
     }
-    
+
     @objc
     func updateProgress(sender: UIButton!) {
         // create the actual alert controller view that will be the pop-up

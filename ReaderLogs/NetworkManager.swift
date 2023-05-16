@@ -70,7 +70,7 @@ class NetworkManager {
     
     func handleReceivedData(data: Data, searchViewController: SearchViewController) {
             do {
-                let bookResponse = try JSONDecoder().decode(BookResponse.self, from: data)
+                let bookResponse = try JSONDecoder().decode(GoogleBookResponse.self, from: data)
                 searchViewController.books = bookResponse.items
             } catch {
                 print("Failed to deserialize json data")
