@@ -5,6 +5,7 @@
 //  Created by Mara Dascalu on 14.05.2023.
 //
 
+import FirebaseAuth
 import Foundation
 import UIKit
 
@@ -18,7 +19,13 @@ struct ModelSource: OptionSet {
     static let all: ModelSource = [.googleBooks, .firebaseDB]
 }
 
+protocol BookViewModelDelegate {
+    func didChange(_ bookViewModel: BookViewModel)
+}
+
 class BookViewModel: NSObject, FirebaseBookModelDelegate {
+
+    var delegate: BookViewModelDelegate?
 
     private(set) var googleBook: GoogleBookModel?
     private(set) var firebaseBook: FirebaseBookModel?
@@ -32,7 +39,7 @@ class BookViewModel: NSObject, FirebaseBookModelDelegate {
     private(set) var startDate: String?
     private(set) var endDate: String?
     private(set) var pagesRead: Int?
-    private(set) var pagesTotal: Int?
+    private(set) var pagesTotal: Int
 
     private(set) var details: String?
     private(set) var bookDescription: String?
@@ -54,6 +61,7 @@ class BookViewModel: NSObject, FirebaseBookModelDelegate {
         title = googleBook.volumeInfo.title
         author = googleBook.volumeInfo.authors?.joined(separator: ", ") ?? "Unknown Author"
         status = .none
+        pagesTotal = googleBook.volumeInfo.pageCount ?? 1
 
         var pageCount = "-"
         if let count = googleBook.volumeInfo.pageCount {
@@ -89,20 +97,33 @@ Page count: \(pageCount)
         endDate = firebaseBook.endDate
         pagesRead = firebaseBook.pagesRead
         pagesTotal = firebaseBook.pagesTotal
-        
+
         super.init()
-        
+
         firebaseBook.delegate = self
+        ModelManager.shared.fetchBookById(Auth.auth().currentUser!.email!, firebaseBook.id) { updatedFirebaseBook in
+
+            if let book = updatedFirebaseBook {
+                self.setup(with: book)
+            }
+        }
     }
 
     convenience init (_ googleBook: GoogleBookModel, _ firebaseBook: FirebaseBookModel) {
 
         self.init(googleBook)
         self.setup(with: firebaseBook)
+
+        ModelManager.shared.fetchBookById(Auth.auth().currentUser!.email!, firebaseBook.id) { updatedFirebaseBook in
+
+            if let book = updatedFirebaseBook {
+                self.setup(with: book)
+            }
+        }
     }
 
     private func setup(with firebaseBook: FirebaseBookModel) {
-        
+
         source.update(with: .firebaseDB)
         self.firebaseBook = firebaseBook
 
@@ -115,8 +136,9 @@ Page count: \(pageCount)
         endDate = firebaseBook.endDate
         pagesRead = firebaseBook.pagesRead
         pagesTotal = firebaseBook.pagesTotal
-        
+
         firebaseBook.delegate = self
+        self.delegate?.didChange(self)
     }
 
     func updateStatus(_ status: BookStatus) {
@@ -124,17 +146,14 @@ Page count: \(pageCount)
         if source.contains(.firebaseDB),
            let firebaseBook = self.firebaseBook {
 
-            // If the View Model is already backed by a Firebase Model -> make use of it & update DB
-
+            // If the View Model is already backed by a Firebase Model -> make use of it to update DB
             firebaseBook.updateStatus(status)
-            
 
         } else if status != .none,
                   let googleBook = self.googleBook,
                   let firebaseBook = FirebaseBookModel(googleBook) {
-            
-            // Otherwise -> create the Firebase Model, make use of it & update DB
 
+            // Otherwise -> create the Firebase Model & make use of it to update DB
             setup(with: firebaseBook)
             firebaseBook.updateStatus(status)
         }
@@ -161,18 +180,10 @@ Page count: \(pageCount)
         }
         firebaseBook.incrementPagesRead(pages)
     }
-    
+
     // MARK: FirebaseBookModelDelegate
 
-    func didChangeStatus(_ status: BookStatus) {
-        self.status = status
-    }
-    
-    func didChangeRating(_ rating: Int) {
-        self.rating = rating
-    }
-    
-    func didChangePagesRead(_ pagesRead: Int) {
-        self.pagesRead = pagesRead
+    func didChange(_ book: FirebaseBookModel) {
+        self.setup(with: book)
     }
 }

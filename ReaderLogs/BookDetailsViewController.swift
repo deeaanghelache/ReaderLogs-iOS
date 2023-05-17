@@ -8,52 +8,57 @@
 import UIKit
 import Kingfisher
 
-class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
+class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookViewModelDelegate {
 
     var bookViewModel: BookViewModel?
 
-    let scrollView = UIScrollView() // Replace view with scrollView
+    let scrollView = UIScrollView()
+
     let bookCoverView = UIImageView()
     let bookTitleView = UILabel()
     let bookAuthorsView = UILabel()
+
     let bookPageCountView = UILabel()
     let bookDescriptionTitleView = UILabel()
     let bookDescriptionView = UITextView()
     let bookDetailsTitleView = UILabel()
     let bookDetailsView = UILabel()
     let bookReadingLogView = UILabel()
+
     let statusButton = UIButton()
+
     let line1 = UILabel()
     let line2 = UILabel()
     let line3 = UILabel()
+
     let startedReading = UILabel()
     let finishedReading = UILabel()
+
     let updateProgressButton = UIButton()
+
     let stackView = UIStackView()
-    var currentPageNumber = 0
-    var currentStatus = BookStatus.wantToRead
+
     let progressView = UIProgressView(progressViewStyle: .bar)
     let progressStack = UIStackView()
     let progressPercentageView = UILabel()
-    var progressPercentage = 0.0
+
     let starStackView = UIStackView()
     var rating = 0
     var starImageViews: [UIImageView] = []
     let starFillImage = UIImage(systemName: "star.fill")
     let starEmptyImage = UIImage(systemName: "star")
-    var currentPageCount = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.currentPageCount = bookViewModel!.pagesTotal ?? 0
+        bookViewModel?.delegate = self
 
         view.backgroundColor = .white
         scrollView.backgroundColor = .white
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
         view.addSubview(scrollView)
-        
+
         // Create a stack view
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -61,46 +66,25 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         // Add stack view to the scroll view
         scrollView.addSubview(stackView)
-        
+
         bookCoverView.backgroundColor = .white
         bookCoverView.translatesAutoresizingMaskIntoConstraints = false
         bookCoverView.kf.cancelDownloadTask()
         bookCoverView.image = nil
-        
-        if let cover = bookViewModel!.cover {
-            bookCoverView.kf.setImage(with: URL(string: cover))
-        } else {
-            bookCoverView.image = UIImage(named: "placeholderImage")
-        }
-
         bookCoverView.contentMode = .center
-//        bookCoverView.layer.cornerRadius = 10
-//        bookCoverView.clipsToBounds = true
         stackView.addArrangedSubview(bookCoverView)
-        
-        bookTitleView.text = bookViewModel!.title
+
         bookTitleView.font = UIFont.boldSystemFont(ofSize: 18)
         bookTitleView.translatesAutoresizingMaskIntoConstraints = false
         bookTitleView.textAlignment = .center
         bookTitleView.numberOfLines = 5
         stackView.addArrangedSubview(bookTitleView)
 
-        bookAuthorsView.text = "by \(bookViewModel!.author)"
         bookAuthorsView.translatesAutoresizingMaskIntoConstraints = false
         bookAuthorsView.textAlignment = .center
         bookAuthorsView.numberOfLines = 3
         stackView.addArrangedSubview(bookAuthorsView)
-        
-        let menuStatusButtonClosure = { (action: UIAction) in
-            self.bookViewModel?.updateStatus(BookStatus(rawValue: action.title)!)
-            self.updateStatus(value: action.title)
-        }
-        statusButton.menu = UIMenu(children: [
-            UIAction(title: BookStatus.none.rawValue, state: .on, handler: menuStatusButtonClosure),
-            UIAction(title: BookStatus.wantToRead.rawValue, handler: menuStatusButtonClosure),
-            UIAction(title: BookStatus.reading.rawValue, handler: menuStatusButtonClosure),
-            UIAction(title: BookStatus.finished.rawValue, handler: menuStatusButtonClosure)
-        ])
+
         statusButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         let downArrowImage = UIImage(systemName: "chevron.down")
         statusButton.setImage(downArrowImage, for: .normal)
@@ -114,10 +98,6 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         statusButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
         statusButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
         stackView.addArrangedSubview(statusButton)
-
-        self.updateStatus(value: BookStatus.none.rawValue)
-
-        // TODO: rating just when status = .finished
         
 //        RATING
         starStackView.axis = .horizontal
@@ -145,14 +125,11 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         line1.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
         line1.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(line1)
-        
-//        TODO: IF-URI
+
 //        reading
-        startedReading.text = "→ You started this book on 1 Apr 2023"
         startedReading.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(startedReading)
 //        finished
-        finishedReading.text = "→ You finished this book on 13 Apr 2023"
         finishedReading.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(finishedReading)
         
@@ -162,24 +139,14 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         progressStack.heightAnchor.constraint(equalToConstant: 20).isActive = true
         progressStack.spacing = 10
         stackView.addArrangedSubview(progressStack)
-        
-        if let pagesTotal = bookViewModel!.pagesTotal {
-            progressPercentage = Double(bookViewModel!.pagesRead ?? 0) / Double(pagesTotal)
-        } else {
-            progressPercentage = 0.0
-        }
 
-        progressView.setProgress(Float (progressPercentage), animated: false)
-        progressView.accessibilityIdentifier = "progressView"
         progressView.layer.cornerRadius = 5
         progressView.clipsToBounds = true
         progressView.backgroundColor = .lightGray
         progressView.tintColor = .systemYellow
         progressView.translatesAutoresizingMaskIntoConstraints = false
         progressStack.addArrangedSubview(progressView)
-        
-        let percentageInt = Int(progressPercentage * 100)
-        progressPercentageView.text = "\(percentageInt)%"
+
         progressPercentageView.textColor = .black
         progressStack.addArrangedSubview(progressPercentageView)
         
@@ -195,43 +162,38 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         updateProgressButton.addTarget(self, action: #selector(updateProgress), for: .touchUpInside)
         stackView.addArrangedSubview(updateProgressButton)
 
-        if bookViewModel!.source == .googleBooks {
+        line2.text = ""
+        line2.layer.borderColor = UIColor.gray.cgColor
+        line2.layer.borderWidth = 1.5
+        line2.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+        line2.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(line2)
 
-            line2.text = ""
-            line2.layer.borderColor = UIColor.gray.cgColor
-            line2.layer.borderWidth = 1.5
-            line2.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
-            line2.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(line2)
+        bookDetailsTitleView.text = "ℹ️ Details"
+        bookDetailsTitleView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(bookDetailsTitleView)
 
-            bookDetailsTitleView.text = "ℹ️ Details"
-            bookDetailsTitleView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(bookDetailsTitleView)
+        bookDetailsView.numberOfLines = 3
+        bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(bookDetailsView)
 
-            bookDetailsView.text = bookViewModel!.details
-            bookDetailsView.numberOfLines = 3
-            bookDetailsView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(bookDetailsView)
+        line3.text = ""
+        line3.layer.borderColor = UIColor.gray.cgColor
+        line3.layer.borderWidth = 1.5
+        line3.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+        line3.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(line3)
 
-            line3.text = ""
-            line3.layer.borderColor = UIColor.gray.cgColor
-            line3.layer.borderWidth = 1.5
-            line3.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
-            line3.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(line3)
+        bookDescriptionTitleView.text = "Description"
+        bookDescriptionTitleView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(bookDescriptionTitleView)
 
-            bookDescriptionTitleView.text = "Description"
-            bookDescriptionTitleView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(bookDescriptionTitleView)
-            
-            bookDescriptionView.text = bookViewModel!.bookDescription
-            bookDescriptionView.textAlignment = .justified
-            bookDescriptionView.isScrollEnabled = false
-            bookDescriptionView.isEditable = false
-            bookDescriptionView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(bookDescriptionView)
-        }
-        
+        bookDescriptionView.textAlignment = .justified
+        bookDescriptionView.isScrollEnabled = false
+        bookDescriptionView.isEditable = false
+        bookDescriptionView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(bookDescriptionView)
+
         // MARK: Constraints
         let constraints = [
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10), // Pin scrollView to view edges
@@ -262,64 +224,125 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
             updateProgressButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 70.0),
             updateProgressButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -70.0),
         ]
-        
         NSLayoutConstraint.activate(constraints)
+
+        self.setupUI(with: bookViewModel!)
     }
 
-    func updateStatus(value: String) {
+    func setupUI(with bookViewModel: BookViewModel) {
 
-        switch value {
-        case BookStatus.none.rawValue:
-            currentStatus = BookStatus.none
+        let menuStatusButtonClosure = { (action: UIAction) in
+            self.bookViewModel!.updateStatus(BookStatus(rawValue: action.title)!)
+        }
+        statusButton.menu = UIMenu(children: [
+            UIAction(
+                title: BookStatus.none.rawValue,
+                state: bookViewModel.status == BookStatus.none ? .on : .off,
+                handler: menuStatusButtonClosure
+            ),
+            UIAction(
+                title: BookStatus.wantToRead.rawValue,
+                state: bookViewModel.status == BookStatus.wantToRead ? .on : .off,
+                handler: menuStatusButtonClosure
+            ),
+            UIAction(
+                title: BookStatus.reading.rawValue,
+                state: bookViewModel.status == BookStatus.reading ? .on : .off,
+                handler: menuStatusButtonClosure
+            ),
+            UIAction(
+                title: BookStatus.finished.rawValue,
+                state: bookViewModel.status == BookStatus.finished ? .on : .off,
+                handler: menuStatusButtonClosure
+            )
+        ])
+
+        if bookViewModel.source.contains(.googleBooks) {
+
+            bookDetailsView.text = bookViewModel.details
+            bookDescriptionView.text = bookViewModel.bookDescription
+        }
+        bookDetailsView.isHidden = !bookViewModel.source.contains(.googleBooks)
+        bookDescriptionView.isHidden = !bookViewModel.source.contains(.googleBooks)
+
+        updateUI(with: bookViewModel)
+    }
+
+    func updateUI(with bookViewModel: BookViewModel) {
+
+        if let cover = bookViewModel.cover {
+            bookCoverView.kf.setImage(with: URL(string: cover))
+        } else {
+            bookCoverView.image = UIImage(named: "placeholderImage")
+        }
+        bookTitleView.text = bookViewModel.title
+        bookAuthorsView.text = "by \(bookViewModel.author)"
+
+        if let startDate = bookViewModel.startDate {
+            startedReading.text = "→ You started this book on \(startDate)"
+        }
+        if let endDate = bookViewModel.endDate {
+            finishedReading.text = "→ You finished this book on \(endDate)"
+        }
+
+        let progressPercentage = Double(bookViewModel.pagesRead ?? 0) / Double(bookViewModel.pagesTotal)
+        progressView.setProgress(Float(progressPercentage), animated: true)
+        progressPercentageView.text = "\(Int(progressPercentage * 100))%"
+
+        updateUI(with: bookViewModel.status)
+
+        self.view.layoutIfNeeded()
+    }
+
+    func updateUI(with status: BookStatus) {
+
+        switch status {
+        case BookStatus.none:
             statusButton.backgroundColor = .systemGray
+            starStackView.isHidden = true
             startedReading.isHidden = true
             finishedReading.isHidden = true
             progressStack.isHidden = true
             updateProgressButton.isHidden = true
             line2.isHidden = true
 
-        case BookStatus.wantToRead.rawValue:
-            currentStatus = BookStatus.wantToRead
+        case BookStatus.wantToRead:
             statusButton.backgroundColor = .systemGreen
+            starStackView.isHidden = true
             startedReading.isHidden = true
             finishedReading.isHidden = true
             progressStack.isHidden = true
             updateProgressButton.isHidden = true
             line2.isHidden = true
 
-        case BookStatus.reading.rawValue:
-            currentStatus = BookStatus.reading
+        case BookStatus.reading:
             statusButton.backgroundColor = .systemYellow
+            starStackView.isHidden = true
             startedReading.isHidden = false
             finishedReading.isHidden = true
             progressStack.isHidden = false
             updateProgressButton.isHidden = false
             line2.isHidden = false
 
-        case BookStatus.finished.rawValue:
-            currentStatus = BookStatus.finished
+        case BookStatus.finished:
             statusButton.backgroundColor = .systemBlue
+            starStackView.isHidden = false
             startedReading.isHidden = false
             finishedReading.isHidden = false
             progressStack.isHidden = false
             updateProgressButton.isHidden = true
             line2.isHidden = false
-
-        default:
-            currentStatus = BookStatus.none
-            statusButton.backgroundColor = .none
-            startedReading.isHidden = true
-            finishedReading.isHidden = true
-            progressStack.isHidden = true
-            updateProgressButton.isHidden = true
-            line2.isHidden = true
         }
     }
 
-    @objc
-    func updateProgress(sender: UIButton!) {
+    @objc func updateProgress(sender: UIButton!) {
+
         // create the actual alert controller view that will be the pop-up
-        let alertController = UIAlertController(title: "Update your progress", message: "What's your current page number?", preferredStyle: .alert)
+        let alertController = UIAlertController(
+            title: "Update your progress",
+            message: "What's your current page number?",
+            preferredStyle: .alert
+        )
 
         alertController.addTextField { (textField) in
             // configure the properties of the text field
@@ -331,20 +354,11 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
 
             // this code runs when the user hits the "save" button
-            if let inputNumber = alertController.textFields![0].text {
-                if let number = Int(inputNumber) {
-                    if number > 0 {
-                        self.currentPageNumber = number
-                        self.progressPercentage = Double(self.currentPageNumber) / Double(self.currentPageCount)
-                        self.progressView.setProgress(Float(self.progressPercentage), animated: true)
-                        self.progressPercentageView.text = "\(Int(self.progressPercentage * 100))%"
-//                        let progress = self.progressStack.viewWithTag("progressView".hash).setProgress(currentPageNumber, animated: false)
-//                        self.viewDidLoad()
-                        
-                    }
-                } else {
-                    self.currentPageNumber = 0
-                }
+            if let inputNumber = alertController.textFields![0].text,
+               let number = Int(inputNumber),
+               number > 0 {
+
+                self.bookViewModel?.incrementPagesRead(number)
             }
         }
 
@@ -355,6 +369,7 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
     }
 
     @objc func starTapped(_ gesture: UITapGestureRecognizer) {
+
         guard let tappedStar = gesture.view as? UIImageView else { return }
 
         // Get the index of the tapped star
@@ -370,5 +385,11 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate {
                 }
             }
         }
+    }
+    
+    // MARK: BookViewModelDelegate
+
+    func didChange(_ bookViewModel: BookViewModel) {
+        updateUI(with: bookViewModel)
     }
 }

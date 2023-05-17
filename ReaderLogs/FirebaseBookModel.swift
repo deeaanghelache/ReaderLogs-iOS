@@ -17,12 +17,7 @@ enum BookStatus: String {
 }
 
 protocol FirebaseBookModelDelegate {
-    
-    func didChangeStatus(_ status: BookStatus)
-    
-    func didChangeRating(_ rating: Int)
-    
-    func didChangePagesRead(_ pagesRead: Int)
+    func didChange(_ book: FirebaseBookModel)
 }
 
 class FirebaseBookModel {
@@ -80,7 +75,7 @@ class FirebaseBookModel {
         self.endDate = dict["endDate"] as! String?
         self.pagesRead = dict["pagesRead"] as! Int?
     }
-    
+
     init?(_ googleBook: GoogleBookModel) {
 
         // Mandatory properties - Model is invalid without them
@@ -111,9 +106,9 @@ class FirebaseBookModel {
         }
 
         ModelManager.shared.storeBook(Auth.auth().currentUser!.email!, self)
-        self.delegate?.didChangeStatus(self.status)
+        self.delegate?.didChange(self)
     }
-    
+
     func updateRating(_ rating: Int) {
         
         guard status == .finished else {
@@ -122,7 +117,7 @@ class FirebaseBookModel {
         self.rating = rating
 
         ModelManager.shared.storeBook(Auth.auth().currentUser!.email!, self)
-        self.delegate?.didChangeRating(self.rating!)
+        self.delegate?.didChange(self)
     }
 
     func incrementPagesRead(_ pages: Int) {
@@ -137,7 +132,7 @@ class FirebaseBookModel {
         self.pagesRead! += pages
 
         ModelManager.shared.storeBook(Auth.auth().currentUser!.email!, self)
-        self.delegate?.didChangePagesRead(self.pagesRead!)
+        self.delegate?.didChange(self)
     }
 
     func toDict() -> [String : Any] {
