@@ -15,10 +15,14 @@ class BookListViewController: UIViewController {
     let finishedButton = UIButton()
     let toReadButton = UIButton()
     let searchBarView = UISearchBar()
+    let networkManager = NetworkManager()
+    var bookListViewModel = BookListViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        bookListViewModel.delegate = self
+        
         // MARK: Title
         title = "My Books"
         
@@ -280,33 +284,48 @@ class BookListViewController: UIViewController {
                                      bottomConstraintToReadButton])
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        bookListViewModel.refreshCache()
+    }
+
+}
+
+extension BookListViewController: BookListViewModelDelegate {
+
+    func didChange(_ viewModel: BookListViewModel) {
+        tableView.reloadData()
+    }
 }
 
 extension BookListViewController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 30;
-//        return userBooks.count
+        return bookListViewModel.results.count;
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: BookCellTableView.bookCellTableView,
-                                                            for: indexPath) as? BookCellTableView {
-            
-//                    cell.layer.masksToBounds = true
-//                    cell.layer.cornerRadius = 10
-//                    cell.layer.borderWidth = 1.0
-//                    cell.layer.shadowOffset = CGSize(width: -1, height: 1)
-//                    cell.layer.borderColor = UIColor.lightGray.cgColor
 
-                    return cell
-                } else {
-                    return UITableViewCell()
-                }
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: BookCellTableView.bookCellTableView,
+            for: indexPath)
+        as! BookCellTableView
+        
+        let bookViewModel = bookListViewModel.results[indexPath.row]
+        cell.setupUI(bookViewModel)
+        
+        return cell
     }
 }
 
 extension BookListViewController: UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // aici cod pt details
+
+        let bookDetailsViewController = BookDetailsViewController()
+        bookDetailsViewController.bookViewModel = bookListViewModel.results[indexPath.row]
+
+        navigationController?.pushViewController(bookDetailsViewController, animated: true)
     }
 }

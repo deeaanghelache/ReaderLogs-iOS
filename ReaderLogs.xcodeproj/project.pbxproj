@@ -13,6 +13,7 @@
 		42250E622A12A6DF00502C74 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42250E612A12A6DF00502C74 /* GoogleService-Info.plist */; };
 		42250E642A12A9B500502C74 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42250E632A12A9B500502C74 /* ModelManager.swift */; };
 		42250E662A15649100502C74 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42250E652A15649100502C74 /* SearchViewModel.swift */; };
+		4246520A2A168DBC0011E586 /* BookListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424652092A168DBC0011E586 /* BookListViewModel.swift */; };
 		4284651A2A11401900A1A7EA /* BookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428465192A11401900A1A7EA /* BookViewModel.swift */; };
 		4284651C2A11661500A1A7EA /* FirebaseBookModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4284651B2A11661500A1A7EA /* FirebaseBookModel.swift */; };
 		428BADA129F7101A00C7EA1C /* FirebaseAuthUI in Frameworks */ = {isa = PBXBuildFile; productRef = 428BADA029F7101A00C7EA1C /* FirebaseAuthUI */; };
@@ -45,6 +46,7 @@
 		42250E612A12A6DF00502C74 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		42250E632A12A9B500502C74 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		42250E652A15649100502C74 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		424652092A168DBC0011E586 /* BookListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewModel.swift; sourceTree = "<group>"; };
 		428465192A11401900A1A7EA /* BookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewModel.swift; sourceTree = "<group>"; };
 		4284651B2A11661500A1A7EA /* FirebaseBookModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseBookModel.swift; sourceTree = "<group>"; };
 		42B97CDE2A0FE68A00238F5D /* CustomAuthPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAuthPickerViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				901A889029DACFDA004C5E55 /* BookCellTableView.swift */,
 				C31E98A029E30FE000615190 /* BookDetailsViewController.swift */,
 				9040DDFB29D9CBEC007A23CD /* BookListViewController.swift */,
+				424652092A168DBC0011E586 /* BookListViewModel.swift */,
 				428465192A11401900A1A7EA /* BookViewModel.swift */,
 				42B97CDE2A0FE68A00238F5D /* CustomAuthPickerViewController.swift */,
 				4284651B2A11661500A1A7EA /* FirebaseBookModel.swift */,
@@ -230,6 +233,7 @@
 				DD9DAA0F29DCA86100F7CB0F /* SummaryProgressView.swift in Sources */,
 				90637B5429E2BBEF00A8D13C /* SearchViewController.swift in Sources */,
 				9040DDFE29D9CD4D007A23CD /* HomeViewController.swift in Sources */,
+				4246520A2A168DBC0011E586 /* BookListViewModel.swift in Sources */,
 				90D5A09E29D8142A000F24D2 /* ViewController.swift in Sources */,
 				42250E662A15649100502C74 /* SearchViewModel.swift in Sources */,
 				C38B3A0629DAD9330069C09C /* NetworkManager.swift in Sources */,
