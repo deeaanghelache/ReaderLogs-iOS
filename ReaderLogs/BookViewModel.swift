@@ -41,6 +41,10 @@ class BookViewModel: NSObject, FirebaseBookModelDelegate {
     private(set) var pagesRead: Int?
     private(set) var pagesTotal: Int
 
+    var progress: Float {
+        return Float(pagesRead ?? 0) / Float(pagesTotal)
+    }
+
     private(set) var details: String?
     private(set) var bookDescription: String?
 

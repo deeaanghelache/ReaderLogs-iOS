@@ -9,24 +9,25 @@
 import Foundation
 
 class NetworkManager {
+
     private let baseURL = "https://www.googleapis.com/books/v1/volumes"
     
     func getURLForBooks(word: String) -> URL? {
-           guard var urlComponents = URLComponents(string: baseURL) else {
-               return nil
-           }
-           
-           let searchQueryItem = URLQueryItem(name: "q", value: word)
-           urlComponents.queryItems = [searchQueryItem]
-           
-           return urlComponents.url
+       guard var urlComponents = URLComponents(string: baseURL) else {
+           return nil
        }
-    
-    func fetchBooks(word: String, searchViewController: SearchViewController) {
+       
+       let searchQueryItem = URLQueryItem(name: "q", value: word)
+       urlComponents.queryItems = [searchQueryItem]
+       
+       return urlComponents.url
+    }
+
+    func fetchBooks(_ word: String, _ cb: @escaping (_ results: [GoogleBookModel]) -> Void) {
         guard let url = getURLForBooks(word: word) else {
             return
         }
-        
+
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue(String(ApiKey.value), forHTTPHeaderField: String(ApiKey.key))
         urlRequest.httpMethod = "GET"
@@ -38,8 +39,8 @@ class NetworkManager {
              ----------------------------------------------------------------\n
              """)
         
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { [weak self] responseData, urlResponse, error in
-            
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { responseData, urlResponse, error in
+
             if let error = error {
                 print("Request failed due to: \(error.localizedDescription)")
                 return
@@ -51,7 +52,7 @@ class NetworkManager {
                 print("No data received or response is not HTTP response")
                 return
             }
-            
+
             print("""
                  \n--------------------------------------------------------------
                  Response for: \(url.absoluteString)
@@ -61,21 +62,16 @@ class NetworkManager {
                  """)
             
             DispatchQueue.main.async {
-                self?.handleReceivedData(data: data, searchViewController: searchViewController)
+
+                do {
+                    let bookResponse = try JSONDecoder().decode(GoogleBookResponse.self, from: data)
+                    cb(bookResponse.items)
+                } catch {
+                    print("Failed to deserialize json data")
+                }
             }
         }
-        
+
         dataTask.resume()
     }
-    
-    func handleReceivedData(data: Data, searchViewController: SearchViewController) {
-            do {
-                let bookResponse = try JSONDecoder().decode(GoogleBookResponse.self, from: data)
-                searchViewController.books = bookResponse.items
-            } catch {
-                print("Failed to deserialize json data")
-            }
-    }
-     
 }
-

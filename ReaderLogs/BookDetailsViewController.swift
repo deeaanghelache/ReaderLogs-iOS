@@ -285,9 +285,9 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
             finishedReading.text = "→ You finished this book on \(endDate)"
         }
 
-        let progressPercentage = Double(bookViewModel.pagesRead ?? 0) / Double(bookViewModel.pagesTotal)
-        progressView.setProgress(Float(progressPercentage), animated: true)
-        progressPercentageView.text = "\(Int(progressPercentage * 100))%"
+        let progress = bookViewModel.progress
+        progressView.setProgress(progress, animated: true)
+        progressPercentageView.text = "\(Int(progress * 100))%"
 
         updateUI(with: bookViewModel.status)
 

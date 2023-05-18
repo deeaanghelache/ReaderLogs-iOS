@@ -60,6 +60,40 @@ class ModelManager {
         observers.append(observer)
     }
     
+    func fetchBooks(by email: String, _ cb: @escaping ([FirebaseBookModel]?) -> Void) {
+        
+        let booksRef = self.ref.child(safeKey("\(email)/books"))
+        booksRef.getData(completion: { error, snapshot in
+
+            // if value for the given path doesn't exist yet, we must inform the caller
+            guard let snapshot = snapshot, snapshot.exists() else {
+                
+                cb(nil)
+                return
+            }
+
+            var models: [FirebaseBookModel] = []
+            for childAny in snapshot.children {
+
+                let child = childAny as! DataSnapshot
+
+                // if value for the given path is invalid, we must log the error and early return
+                guard let model = FirebaseBookModel(child) else {
+
+                    NSLog(
+                        "Could not create Firebase Book Model for user with email %@ and bookId %@ due to invalid snapshot data",
+                        email,
+                        child.key
+                    )
+                    cb(nil)
+                    return
+                }
+                models.append(model)
+            }
+            cb(models)
+        })
+    }
+
     func storeBook(_ email: String, _ book: FirebaseBookModel) {
 
         let bookRef = self.ref.child(safeKey("\(email)/books/\(book.id)"))
