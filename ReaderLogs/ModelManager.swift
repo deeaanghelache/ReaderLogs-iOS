@@ -67,7 +67,7 @@ class ModelManager {
 
             // if value for the given path doesn't exist yet, we must inform the caller
             guard let snapshot = snapshot, snapshot.exists() else {
-                
+
                 cb(nil)
                 return
             }
@@ -90,8 +90,55 @@ class ModelManager {
                 }
                 models.append(model)
             }
+
+            // if all good, we must inform the caller
             cb(models)
         })
+    }
+    
+    func fetchReadLog(by email: String, _ cb: @escaping ([ReadLogModel]?) -> Void) {
+
+        let readLogRef = self.ref.child(safeKey("\(email)/readLog"))
+        readLogRef.getData(completion: { error, snapshot in
+
+            // if value for the given path doesn't exist yet, we must inform the caller
+            guard let snapshot = snapshot, snapshot.exists() else {
+
+                cb(nil)
+                return
+            }
+
+            let models: [ReadLogModel] = snapshot.children.map { childAny in
+                let child = childAny as! DataSnapshot
+                return ReadLogModel(child)
+            }
+
+            // if all good, we must inform the caller
+            cb(models)
+        })
+    }
+    
+    func fetchReadLog(by email: String, _ day: String, _ cb: @escaping (Int?) -> Void) {
+
+        let readLogRef = self.ref.child(safeKey("\(email)/readLog/\(day)"))
+        readLogRef.getData(completion: { error, snapshot in
+
+            // if value for the given path doesn't exist yet, we must inform the caller
+            guard let snapshot = snapshot, snapshot.exists() else {
+
+                cb(nil)
+                return
+            }
+
+            // if all good, we must inform the caller
+            cb(snapshot.value as? Int)
+        })
+    }
+    
+    func updateReadLog(by email: String, _ day: String, _ count: Int) {
+
+        let readLogRef = self.ref.child(safeKey("\(email)/readLog/\(day)"))
+        readLogRef.setValue(count)
     }
 
     func storeBook(_ email: String, _ book: FirebaseBookModel) {

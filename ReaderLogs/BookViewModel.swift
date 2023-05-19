@@ -51,7 +51,7 @@ class BookViewModel: NSObject, FirebaseBookModelDelegate {
     private lazy var dateFormatter: DateFormatter = {
 
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dateFormatter.dateFormat = "dd-MM-yyyy"
 
         return dateFormatter
     }()

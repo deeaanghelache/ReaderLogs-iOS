@@ -38,7 +38,7 @@ class FirebaseBookModel {
     private lazy var dateFormatter: DateFormatter = {
 
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dateFormatter.dateFormat = "dd-MM-yyyy"
 
         return dateFormatter
     }()
@@ -129,11 +129,25 @@ class FirebaseBookModel {
         if self.pagesRead == nil {
             self.pagesRead = 0
         }
-        self.pagesRead! += pages
-        self.pagesRead = min(self.pagesTotal, self.pagesRead!)
 
-        ModelManager.shared.storeBook(Auth.auth().currentUser!.email!, self)
-        self.delegate?.didChange(self)
+        let today = dateFormatter.string(from: Date())
+        ModelManager.shared.fetchReadLog(by: Auth.auth().currentUser!.email!, today) { todayPages in
+
+            let newValue = min(self.pagesTotal, self.pagesRead! + pages)
+            let diff = newValue - self.pagesRead!
+            self.pagesRead = newValue
+
+            var readLogPages = 0
+            if let todayPagesUnboxed = todayPages {
+                 readLogPages = todayPagesUnboxed
+            }
+            readLogPages += diff
+
+            ModelManager.shared.updateReadLog(by: Auth.auth().currentUser!.email!, today, readLogPages)
+            ModelManager.shared.storeBook(Auth.auth().currentUser!.email!, self)
+
+            self.delegate?.didChange(self)
+        }
     }
 
     func toDict() -> [String : Any] {
