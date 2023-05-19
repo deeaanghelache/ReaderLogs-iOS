@@ -140,6 +140,39 @@ class ModelManager {
         let readLogRef = self.ref.child(safeKey("\(email)/readLog/\(day)"))
         readLogRef.setValue(count)
     }
+    
+    func fetchChallenge(by email: String, _ cb: @escaping (ChallengeModel?) -> Void) {
+        
+        let challengeRef = self.ref.child(safeKey("\(email)/challenge"))
+        challengeRef.getData(completion: { error, snapshot in
+
+            // if value for the given path doesn't exist yet, we must inform the caller
+            guard let snapshot = snapshot, snapshot.exists() else {
+
+                cb(nil)
+                return
+            }
+
+            // if value for the given path is invalid, we must log the error and early return
+            guard let model = ChallengeModel(snapshot) else {
+
+                NSLog(
+                    "Could not create Firebase Challenge Model for user with email %@ due to invalid snapshot data",
+                    email
+                )
+                return
+            }
+
+            // if all good, we must inform the caller
+            cb(model)
+        })
+    }
+    
+    func storeChallenge(_ email: String, _ challenge: ChallengeModel) {
+
+        let challengeRef = self.ref.child(safeKey("\(email)/challenge"))
+        challengeRef.setValue(challenge.toDict())
+    }
 
     func storeBook(_ email: String, _ book: FirebaseBookModel) {
 
