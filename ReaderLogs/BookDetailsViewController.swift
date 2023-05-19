@@ -262,7 +262,13 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
             bookDetailsView.text = bookViewModel.details
             bookDescriptionView.text = bookViewModel.bookDescription
         }
+
+        line2.isHidden = !bookViewModel.source.contains(.googleBooks)
+        bookDetailsTitleView.isHidden = !bookViewModel.source.contains(.googleBooks)
         bookDetailsView.isHidden = !bookViewModel.source.contains(.googleBooks)
+
+        line3.isHidden = !bookViewModel.source.contains(.googleBooks)
+        bookDescriptionTitleView.isHidden = !bookViewModel.source.contains(.googleBooks)
         bookDescriptionView.isHidden = !bookViewModel.source.contains(.googleBooks)
 
         updateUI(with: bookViewModel)
