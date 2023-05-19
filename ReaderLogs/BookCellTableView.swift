@@ -32,7 +32,7 @@ class BookCellTableView: UITableViewCell {
     var rating = 4 // daca e finished -> afiseaza
     var ratingView = UILabel()
     let progressView = UIProgressView(progressViewStyle: .bar)
-    var progressValue = 0.7
+
     var finished = false
 
     // MARK: Init function
@@ -72,20 +72,11 @@ class BookCellTableView: UITableViewCell {
         cellStatusLabel.clipsToBounds = true
         cellStatusLabel.textAlignment = .center
         
-        if (finished) {
-            cellStatusLabel.layer.borderColor = UIColor.systemGreen.cgColor
-            cellStatusLabel.backgroundColor = .systemGreen
-            cellStatusLabel.text = "Done"
-        } else {
-            cellStatusLabel.layer.borderColor = UIColor.lightGray.cgColor
-            cellStatusLabel.backgroundColor = .lightGray
-            cellStatusLabel.text = "Reading Now"
-        }
+
         contentView.addSubview(cellStatusLabel)
         
         // Progress
         if (!finished) {
-            progressView.setProgress(Float(progressValue), animated: false)
             progressView.layer.cornerRadius = 5.0
             progressView.clipsToBounds = true
             progressView.backgroundColor = .lightGray
@@ -98,7 +89,7 @@ class BookCellTableView: UITableViewCell {
             var fullStars = ""
             var emptyStars = ""
             var remainingStars = 5 - rating
-            
+
             for _ in 1...rating {
                 fullStars += "★"
             }
@@ -145,6 +136,48 @@ class BookCellTableView: UITableViewCell {
         ]
 
         NSLayoutConstraint.activate(constraints)
+    }
+    
+    func setupUI(_ bookViewModel: BookViewModel) {
+
+        cellBookTitleLabel.text = bookViewModel.title
+        cellBookAuthor.text = bookViewModel.author
+
+        cellBookCoverView.kf.cancelDownloadTask()
+        cellBookCoverView.image = nil
+
+        let imageUrl = URL(string: bookViewModel.cover ?? "image")
+        cellBookCoverView.kf.setImage(with: imageUrl)
+        
+        switch (bookViewModel.status) {
+        case .none:
+            fallthrough
+
+        case .wantToRead:
+            cellStatusLabel.isHidden = true
+
+        case .reading:
+            cellStatusLabel.isHidden = false
+            cellStatusLabel.layer.borderColor = UIColor.systemYellow.cgColor
+            cellStatusLabel.backgroundColor = .systemYellow
+            cellStatusLabel.text = "Reading Now"
+ 
+        case .finished:
+            cellStatusLabel.isHidden = false
+            cellStatusLabel.layer.borderColor = UIColor.systemGreen.cgColor
+            cellStatusLabel.backgroundColor = .systemGreen
+            cellStatusLabel.text = "Done"
+        }
+
+        if (bookViewModel.status == .reading) {
+
+            let progress = bookViewModel.progress
+            progressView.setProgress(progress, animated: false)
+            progressView.isHidden = false
+
+        } else {
+            progressView.isHidden = true
+        }
     }
 
     required init?(coder: NSCoder) {

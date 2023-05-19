@@ -1,5 +1,5 @@
 //
-//  Book.swift
+//  GoogleBookModel.swift
 //  ReaderLogs
 //
 //  Created by Maria Duțu on 03.04.2023.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct BookResponse: Codable {
+struct GoogleBookResponse: Codable {
     let kind: String
     let totalItems: Int
-    let items: [Book]
+    let items: [GoogleBookModel]
 }
 
 struct VolumeInfo: Codable {
@@ -28,14 +28,15 @@ struct ImageLinks: Codable {
     let thumbnail: String?
 }
 
-struct Book: Codable {
+struct GoogleBookModel: Codable {
+
     let id: String
     let volumeInfo: VolumeInfo
-    
+
     init(from decoder: Decoder) throws {
+
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
         self.volumeInfo = try container.decode(VolumeInfo.self, forKey: .volumeInfo)
     }
-    
 }

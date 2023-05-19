@@ -15,10 +15,14 @@ class BookListViewController: UIViewController {
     let finishedButton = UIButton()
     let toReadButton = UIButton()
     let searchBarView = UISearchBar()
+    let networkManager = NetworkManager()
+    var bookListViewModel = BookListViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        bookListViewModel.delegate = self
+        
         // MARK: Title
         title = "My Books"
         
@@ -70,6 +74,7 @@ class BookListViewController: UIViewController {
         searchBarView.placeholder = "Search book by title..."
         searchBarView.searchBarStyle = .minimal
         searchBarView.translatesAutoresizingMaskIntoConstraints = false
+        searchBarView.delegate = self
         view.addSubview(searchBarView)
         
         // left
@@ -113,6 +118,7 @@ class BookListViewController: UIViewController {
         allButton.layer.cornerRadius = 10.0
         allButton.clipsToBounds = true
         allButton.translatesAutoresizingMaskIntoConstraints = false
+        allButton.addTarget(self, action: #selector(didTapAllButton), for: .touchUpInside)
         view.addSubview(allButton)
         
         // left
@@ -156,6 +162,7 @@ class BookListViewController: UIViewController {
         currentlyReadingButton.layer.cornerRadius = 10.0
         currentlyReadingButton.clipsToBounds = true
         currentlyReadingButton.translatesAutoresizingMaskIntoConstraints = false
+        currentlyReadingButton.addTarget(self, action: #selector(didTapReadingButton), for: .touchUpInside)
         view.addSubview(currentlyReadingButton)
         
         // left
@@ -199,6 +206,7 @@ class BookListViewController: UIViewController {
         finishedButton.layer.cornerRadius = 10.0
         finishedButton.clipsToBounds = true
         finishedButton.translatesAutoresizingMaskIntoConstraints = false
+        finishedButton.addTarget(self, action: #selector(didTapFinishedButton), for: .touchUpInside)
         view.addSubview(finishedButton)
         
         // left
@@ -242,6 +250,7 @@ class BookListViewController: UIViewController {
         toReadButton.layer.cornerRadius = 10.0
         toReadButton.clipsToBounds = true
         toReadButton.translatesAutoresizingMaskIntoConstraints = false
+        toReadButton.addTarget(self, action: #selector(didTapWantToReadButton), for: .touchUpInside)
         view.addSubview(toReadButton)
         
         // left
@@ -280,33 +289,70 @@ class BookListViewController: UIViewController {
                                      bottomConstraintToReadButton])
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        bookListViewModel.refreshCache()
+    }
+
+    @objc func didTapAllButton(sender: UIButton!) {
+        bookListViewModel.filter(by: nil)
+    }
+
+    @objc func didTapReadingButton(sender: UIButton!) {
+        bookListViewModel.filter(by: .reading)
+    }
+
+    @objc func didTapFinishedButton(sender: UIButton!) {
+        bookListViewModel.filter(by: .finished)
+    }
+
+    @objc func didTapWantToReadButton(sender: UIButton!) {
+        bookListViewModel.filter(by: .wantToRead)
+    }
+}
+
+extension BookListViewController: BookListViewModelDelegate {
+
+    func didChange(_ viewModel: BookListViewModel) {
+        tableView.reloadData()
+    }
+}
+
+extension BookListViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        bookListViewModel.filter(by: searchText)
+    }
 }
 
 extension BookListViewController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 30;
-//        return userBooks.count
+        return bookListViewModel.results.count;
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: BookCellTableView.bookCellTableView,
-                                                            for: indexPath) as? BookCellTableView {
-            
-//                    cell.layer.masksToBounds = true
-//                    cell.layer.cornerRadius = 10
-//                    cell.layer.borderWidth = 1.0
-//                    cell.layer.shadowOffset = CGSize(width: -1, height: 1)
-//                    cell.layer.borderColor = UIColor.lightGray.cgColor
 
-                    return cell
-                } else {
-                    return UITableViewCell()
-                }
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: BookCellTableView.bookCellTableView,
+            for: indexPath)
+        as! BookCellTableView
+        
+        let bookViewModel = bookListViewModel.results[indexPath.row]
+        cell.setupUI(bookViewModel)
+        
+        return cell
     }
 }
 
 extension BookListViewController: UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // aici cod pt details
+
+        let bookDetailsViewController = BookDetailsViewController()
+        bookDetailsViewController.bookViewModel = bookListViewModel.results[indexPath.row]
+
+        navigationController?.pushViewController(bookDetailsViewController, animated: true)
     }
 }

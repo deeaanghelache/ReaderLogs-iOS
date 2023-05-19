@@ -11,32 +11,37 @@ import FirebaseAuthUI
 //TODO: make it responsive for smaller screens (maybe use UITableView)
 
 class HomeViewController: UIViewController, FUIAuthDelegate {
+    
+    private var viewModel: ReadLogViewModel = ReadLogViewModel()
+
+    private var todayProgress: SummaryProgressView = SummaryProgressView()
+    private var thisWeekProgress: SummaryProgressView = SummaryProgressView()
+    private var thisMonthProgress: SummaryProgressView = SummaryProgressView()
+    private var recordProgress: SummaryProgressView = SummaryProgressView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 //        view.backgroundColor = .white
         title = "Reading Progress"
-        
-        let todayProgress = SummaryProgressView()
+
+        viewModel.delegate = self
+
         todayProgress.title = "Today"
         todayProgress.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(todayProgress)
-        
-        let thisWeekProgress = SummaryProgressView()
-        thisWeekProgress.title = "This week"
+
+        thisWeekProgress.title = "Last 7 days"
         thisWeekProgress.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(thisWeekProgress)
-        
-        let thisMonthProgress = SummaryProgressView()
-        thisMonthProgress.title = "This month"
+
+        thisMonthProgress.title = "Last 30 days"
         thisMonthProgress.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(thisMonthProgress)
-        
-        let recordProgress = SummaryProgressView()
+
         recordProgress.title = "Record"
         recordProgress.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(recordProgress)
-        
+
         let constaints = [
             todayProgress.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10.0),
             todayProgress.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10.0),
@@ -58,15 +63,25 @@ class HomeViewController: UIViewController, FUIAuthDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.refreshCache()
     }
-    */
 
+    func setupUI(with viewModel: ReadLogViewModel) {
+        
+        todayProgress.pages = viewModel.today
+        thisWeekProgress.pages = viewModel.lastWeek
+        thisMonthProgress.pages = viewModel.lastMonth
+        recordProgress.pages = viewModel.all
+    }
+}
+
+extension HomeViewController: ReadLogViewModelDelegate {
+
+    func didChange(_ viewModel: ReadLogViewModel) {
+        setupUI(with: viewModel)
+    }
 }

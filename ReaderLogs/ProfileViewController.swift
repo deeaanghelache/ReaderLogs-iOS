@@ -29,14 +29,15 @@ class ProfileViewController: UIViewController {
 
     let challengeButton = UIButton(type: .system)
     let signOutButton = UIButton(type: .system)
-
-    var maxNumberOfBooks : Int = 0
-    var currentNumberOfBooksRead : Int = 2
+    
+    private let viewModel = ProfileViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "Profile"
+        
+        viewModel.delegate = self
         
         labelView.backgroundColor = .systemBlue
         labelView.textColor = .black
@@ -144,6 +145,12 @@ class ProfileViewController: UIViewController {
 
         NSLayoutConstraint.activate(constraints)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewModel.refreshCache()
+    }
 
     @objc func addChallenge(sender: UIButton!) {
         // create the actual alert controller view that will be the pop-up
@@ -159,16 +166,11 @@ class ProfileViewController: UIViewController {
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
 
             // this code runs when the user hits the "save" button
-            if let inputNumber = alertController.textFields![0].text {
-                if let number = Int(inputNumber) {
-                    if number > 0 {
-                        self.maxNumberOfBooks = number
-                        self.showChallengeLabel()
-                    }
-                } else {
-                    self.maxNumberOfBooks = 0
-                }
-                print(self.maxNumberOfBooks)
+            if let inputNumber = alertController.textFields![0].text,
+               let number = Int(inputNumber),
+               number > 0 {
+
+                self.viewModel.setupChallenge(number)
             }
         }
 
@@ -187,13 +189,20 @@ class ProfileViewController: UIViewController {
             NSLog("Encountered error during sign out: %@", error.localizedDescription)
         }
     }
-    
-    func showChallengeLabel() {
 
-        challengeLabel.text = "You have read \(currentNumberOfBooksRead)/\(maxNumberOfBooks) books this year!"
-        challengeLabel.isHidden = false
-        challengeButton.isHidden = true
+    private func setupUI(with viewModel: ProfileViewModel) {
+
+        challengeLabel.text = "You have read \(viewModel.booksRead)/\(viewModel.booksTotal) books this year!"
+        challengeLabel.isHidden = viewModel.booksTotal == 0
+        challengeButton.isHidden = viewModel.booksTotal > 0
 
         view.layoutIfNeeded()
+    }
+}
+
+extension ProfileViewController: ProfileViewModelDelegate {
+
+    func didChange(_ viewModel: ProfileViewModel) {
+        self.setupUI(with: viewModel)
     }
 }

@@ -18,27 +18,39 @@ class SummaryProgressView: UIView {
         }
     }
     
-    var pagesCount = "0 pages"
+    private var _pages: Int = 0
+    var pages: Int {
+        set {
+            _pages = newValue
+            summaryPagesCount.text = "\(newValue) pages"
+        }
+        get {
+            return _pages
+        }
+    }
+
     private let summaryTitle = UITextView()
-    
-    
+    private let summaryPagesCount = UILabel()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         summaryTitle.translatesAutoresizingMaskIntoConstraints = false
         summaryTitle.text = ""
         summaryTitle.textColor = .black
         summaryTitle.font = UIFont.italicSystemFont(ofSize: 30.0)
         summaryTitle.isScrollEnabled = false
+        summaryTitle.isEditable = false
+        summaryTitle.isSelectable = false
         self.addSubview(summaryTitle)
-        
+
         let panelBackground = UIView()
         panelBackground.translatesAutoresizingMaskIntoConstraints = false
         panelBackground.backgroundColor = .lightGray
         panelBackground.clipsToBounds = true
         panelBackground.layer.cornerRadius = 20.0
         self.addSubview(panelBackground)
-        
+
         let summaryLabel = UILabel()
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.text = "Read pages"
@@ -46,15 +58,13 @@ class SummaryProgressView: UIView {
         summaryLabel.textColor = .white
         summaryLabel.font = summaryLabel.font.withSize(20.0)
         panelBackground.addSubview(summaryLabel)
-        
-        let summaryPagesCount = UILabel()
+
         summaryPagesCount.translatesAutoresizingMaskIntoConstraints = false
-        summaryPagesCount.text = pagesCount
         summaryPagesCount.textAlignment = .center
         summaryPagesCount.textColor = .white
         summaryPagesCount.font = summaryPagesCount.font.withSize(25.0)
         panelBackground.addSubview(summaryPagesCount)
-        
+
         let constaints = [
             //Title
             summaryTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0),
