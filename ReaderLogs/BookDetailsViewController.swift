@@ -85,6 +85,7 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
         bookAuthorsView.numberOfLines = 3
         stackView.addArrangedSubview(bookAuthorsView)
 
+        statusButton.setTitle(BookStatus.none.rawValue, for: .normal)
         statusButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         let downArrowImage = UIImage(systemName: "chevron.down")
         statusButton.setImage(downArrowImage, for: .normal)
@@ -208,8 +209,8 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
 //            BOOK STATUS BUTTON
-            stackView.arrangedSubviews[3].leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 90.0),
-            stackView.arrangedSubviews[3].trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -90.0),
+            statusButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 90.0),
+            statusButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -90.0),
 
             statusButton.imageView!.leadingAnchor.constraint(equalTo: statusButton.leadingAnchor, constant: 10.0),
             statusButton.imageView!.topAnchor.constraint(equalTo: statusButton.topAnchor, constant: 5.0),

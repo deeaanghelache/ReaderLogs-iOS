@@ -41,6 +41,7 @@ class SummaryProgressView: UIView {
         summaryTitle.font = UIFont.italicSystemFont(ofSize: 30.0)
         summaryTitle.isScrollEnabled = false
         summaryTitle.isEditable = false
+        summaryTitle.isSelectable = false
         self.addSubview(summaryTitle)
 
         let panelBackground = UIView()
