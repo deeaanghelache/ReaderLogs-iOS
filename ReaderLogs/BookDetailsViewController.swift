@@ -271,10 +271,10 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
         bookDescriptionTitleView.isHidden = !bookViewModel.source.contains(.googleBooks)
         bookDescriptionView.isHidden = !bookViewModel.source.contains(.googleBooks)
 
-        updateUI(with: bookViewModel)
+        updateUI(with: bookViewModel, false)
     }
 
-    func updateUI(with bookViewModel: BookViewModel) {
+    func updateUI(with bookViewModel: BookViewModel, _ animated: Bool) {
 
         if let cover = bookViewModel.cover {
             bookCoverView.kf.setImage(with: URL(string: cover))
@@ -292,9 +292,12 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
         }
 
         let progress = bookViewModel.progress
-        progressView.setProgress(progress, animated: true)
+        progressView.setProgress(progress, animated: animated)
         progressPercentageView.text = "\(Int(progress * 100))%"
 
+        if let rating = bookViewModel.rating {
+            updateUI(with: rating)
+        }
         updateUI(with: bookViewModel.status)
 
         self.view.layoutIfNeeded()
@@ -335,9 +338,24 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
             starStackView.isHidden = false
             startedReading.isHidden = false
             finishedReading.isHidden = false
-            progressStack.isHidden = false
+            progressStack.isHidden = true
             updateProgressButton.isHidden = true
             line2.isHidden = false
+        }
+    }
+    
+    func updateUI(with rating: Int) {
+
+        // Update the star images based on tapped star index
+        for index in 0..<starImageViews.count {
+
+            if index <= rating {
+                // Fill the stars up to the tapped star
+                starImageViews[index].image = starFillImage
+            } else {
+                // Empty the stars after the tapped star
+                starImageViews[index].image = starEmptyImage
+            }
         }
     }
 
@@ -377,25 +395,12 @@ class BookDetailsViewController: UIViewController, UIScrollViewDelegate, BookVie
     @objc func starTapped(_ gesture: UITapGestureRecognizer) {
 
         guard let tappedStar = gesture.view as? UIImageView else { return }
-
-        // Get the index of the tapped star
-        if let tappedIndex = starImageViews.firstIndex(of: tappedStar) {
-            // Update the star images based on tapped star index
-            for index in 0..<starImageViews.count {
-                if index <= tappedIndex {
-                    // Fill the stars up to the tapped star
-                    starImageViews[index].image = starFillImage
-                } else {
-                    // Empty the stars after the tapped star
-                    starImageViews[index].image = starEmptyImage
-                }
-            }
-        }
+        self.bookViewModel?.updateRating(starImageViews.firstIndex(of: tappedStar) ?? 0)
     }
-    
+
     // MARK: BookViewModelDelegate
 
     func didChange(_ bookViewModel: BookViewModel) {
-        updateUI(with: bookViewModel)
+        updateUI(with: bookViewModel, true)
     }
 }

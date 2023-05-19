@@ -130,6 +130,7 @@ class FirebaseBookModel {
             self.pagesRead = 0
         }
         self.pagesRead! += pages
+        self.pagesRead = min(self.pagesTotal, self.pagesRead!)
 
         ModelManager.shared.storeBook(Auth.auth().currentUser!.email!, self)
         self.delegate?.didChange(self)
