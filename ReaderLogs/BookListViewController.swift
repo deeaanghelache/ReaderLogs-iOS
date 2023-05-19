@@ -74,6 +74,7 @@ class BookListViewController: UIViewController {
         searchBarView.placeholder = "Search book by title..."
         searchBarView.searchBarStyle = .minimal
         searchBarView.translatesAutoresizingMaskIntoConstraints = false
+        searchBarView.delegate = self
         view.addSubview(searchBarView)
         
         // left
@@ -117,6 +118,7 @@ class BookListViewController: UIViewController {
         allButton.layer.cornerRadius = 10.0
         allButton.clipsToBounds = true
         allButton.translatesAutoresizingMaskIntoConstraints = false
+        allButton.addTarget(self, action: #selector(didTapAllButton), for: .touchUpInside)
         view.addSubview(allButton)
         
         // left
@@ -160,6 +162,7 @@ class BookListViewController: UIViewController {
         currentlyReadingButton.layer.cornerRadius = 10.0
         currentlyReadingButton.clipsToBounds = true
         currentlyReadingButton.translatesAutoresizingMaskIntoConstraints = false
+        currentlyReadingButton.addTarget(self, action: #selector(didTapReadingButton), for: .touchUpInside)
         view.addSubview(currentlyReadingButton)
         
         // left
@@ -203,6 +206,7 @@ class BookListViewController: UIViewController {
         finishedButton.layer.cornerRadius = 10.0
         finishedButton.clipsToBounds = true
         finishedButton.translatesAutoresizingMaskIntoConstraints = false
+        finishedButton.addTarget(self, action: #selector(didTapFinishedButton), for: .touchUpInside)
         view.addSubview(finishedButton)
         
         // left
@@ -246,6 +250,7 @@ class BookListViewController: UIViewController {
         toReadButton.layer.cornerRadius = 10.0
         toReadButton.clipsToBounds = true
         toReadButton.translatesAutoresizingMaskIntoConstraints = false
+        toReadButton.addTarget(self, action: #selector(didTapWantToReadButton), for: .touchUpInside)
         view.addSubview(toReadButton)
         
         // left
@@ -290,12 +295,34 @@ class BookListViewController: UIViewController {
         bookListViewModel.refreshCache()
     }
 
+    @objc func didTapAllButton(sender: UIButton!) {
+        bookListViewModel.filter(by: nil)
+    }
+
+    @objc func didTapReadingButton(sender: UIButton!) {
+        bookListViewModel.filter(by: .reading)
+    }
+
+    @objc func didTapFinishedButton(sender: UIButton!) {
+        bookListViewModel.filter(by: .finished)
+    }
+
+    @objc func didTapWantToReadButton(sender: UIButton!) {
+        bookListViewModel.filter(by: .wantToRead)
+    }
 }
 
 extension BookListViewController: BookListViewModelDelegate {
 
     func didChange(_ viewModel: BookListViewModel) {
         tableView.reloadData()
+    }
+}
+
+extension BookListViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        bookListViewModel.filter(by: searchText)
     }
 }
 
