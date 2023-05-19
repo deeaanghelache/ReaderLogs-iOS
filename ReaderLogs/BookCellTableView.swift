@@ -88,7 +88,7 @@ class BookCellTableView: UITableViewCell {
         if (finished) {
             var fullStars = ""
             var emptyStars = ""
-            var remainingStars = 5 - rating
+            let remainingStars = 5 - rating
 
             for _ in 1...rating {
                 fullStars += "★"
@@ -98,7 +98,7 @@ class BookCellTableView: UITableViewCell {
                 emptyStars += "☆"
             }
             
-            var allStars = "\(fullStars)\(emptyStars)"
+            let allStars = "\(fullStars)\(emptyStars)"
 
             ratingView.text = String(allStars.dropLast())
             ratingView.font = UIFont.boldSystemFont(ofSize: 20)
